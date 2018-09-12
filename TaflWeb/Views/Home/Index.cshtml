@@ -1,0 +1,21 @@
+﻿
+@{
+    Layout = "_Layout";
+}
+<head>
+    <script src="js/client.js"></script>
+</head>
+<h2>Index</h2>
+<div>
+    <h2>Get data</h2>
+</div>
+<div>
+    <label id="currentValue"></label>
+</div>
+<form id="setForm" asp-action="SetString" asp-controller="Game" method="post">
+    <div class="form-group">
+        <label >String:</label>
+        <input class="form-control" id="Text" name="Text"/>
+        <button type="submit" class="button btn-sm btn-primary">Set</button>
+    </div>
+</form>
