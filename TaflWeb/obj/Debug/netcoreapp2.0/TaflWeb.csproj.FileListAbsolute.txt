@@ -8,4 +8,3 @@ C:\Github\TaflWeb\TaflWeb\obj\Debug\netcoreapp2.0\TaflWeb.AssemblyInfoInputs.cac
 C:\Github\TaflWeb\TaflWeb\obj\Debug\netcoreapp2.0\TaflWeb.AssemblyInfo.cs
 C:\Github\TaflWeb\TaflWeb\obj\Debug\netcoreapp2.0\TaflWeb.dll
 C:\Github\TaflWeb\TaflWeb\obj\Debug\netcoreapp2.0\TaflWeb.pdb
-C:\Github\TaflWeb\TaflWeb\obj\Debug\netcoreapp2.0\TaflWeb.csprojAssemblyReference.cache

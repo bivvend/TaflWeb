@@ -7,10 +7,12 @@ using TaflWeb.Models;
 
 namespace TaflWeb.Controllers
 {
-    public class HomeController : Controller
+    public class GameBoardController : Controller
     {
 
-        public ViewResult Index()
+        private IGame game { get; set; }
+        public GameBoardController(IGame gameIn) => game = gameIn;
+        public IActionResult CurrentBoard()
         {
             return View();
         }

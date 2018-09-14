@@ -7,6 +7,10 @@ using TaflWeb.Models;
 
 namespace TaflWeb.Controllers
 {
+    /// <summary>
+    /// API access controller - Access to data of current (and historic boards)
+    /// Also used to run and return server side AI calculations.
+    /// </summary>
     public class GameController : Controller
     {
         private IGame game { get; set; }
