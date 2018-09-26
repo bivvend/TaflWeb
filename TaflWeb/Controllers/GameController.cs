@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TaflWeb.Model.Classes;
 using TaflWeb.Models;
 
 namespace TaflWeb.Controllers
@@ -14,7 +15,7 @@ namespace TaflWeb.Controllers
     public class GameController : Controller
     {
         private IGame game { get; set; }
-
+        
         public GameController(IGame gameIn)
         {
             game = gameIn;
@@ -25,6 +26,14 @@ namespace TaflWeb.Controllers
         public string GetString()
         {
             return game.GetString();
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/GetBoard")]
+        public async Task<string> GetBoard()
+        {
+            string boardAsJson =  await game.GetBoardAsJson();
+            return boardAsJson;
         }
 
         [HttpPost]

@@ -4,4 +4,9 @@
             $("#currentValue").text(result);
         }
     });
+    $.ajax({
+        url: "/api/Game/GetBoard", success: function (result) {
+            $("#jsonBoard").text(result);
+        }
+    });
 });

@@ -25,18 +25,19 @@ namespace TaflWeb.Models
             }
         }
 
-        private SimpleBoard _baseBoard;
-        public SimpleBoard baseBoard
+        private BoardModel _board;
+        public BoardModel board
         {
             get
             {
-                return _baseBoard;
+                return _board;
             }
             set
             {
-                _baseBoard = value;
+                _board = value;
             }
         }
+
 
         private TurnState _currentTurnState;
         public TurnState currentTurnState
@@ -97,6 +98,7 @@ namespace TaflWeb.Models
         public Game()
         {
             test = "Hello from API.";
+            board = new BoardModel();
         }
         public void SetString(string value)
         {
@@ -111,7 +113,14 @@ namespace TaflWeb.Models
         async public Task<Move> RunAITurn(SimpleBoard startBoard)
         {
             Move move = new Move();
+            await Task.Delay(200);
             return move;
+        }
+
+        async public Task<string> GetBoardAsJson()
+        {
+            string boardString = await Task<string>.Factory.StartNew(()=>board.GetSimpleBoardAsJSON());
+            return boardString;
         }
     }
 }

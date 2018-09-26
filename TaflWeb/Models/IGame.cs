@@ -13,7 +13,9 @@ namespace TaflWeb.Models
     {
         Sage sage { get; set; }
 
-        SimpleBoard baseBoard { get; set; }
+        BoardModel board { get; set; }
+
+        Task<string> GetBoardAsJson(); //
 
         TurnState currentTurnState { get; set; }
 
