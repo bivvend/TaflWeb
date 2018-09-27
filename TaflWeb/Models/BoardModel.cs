@@ -47,9 +47,11 @@ namespace TaflWeb.Models
             }
         }
 
-        public BoardModel()
+        public BoardModel(int sizeXIn, int sizeYIn)
         {
             board = new List<Square>();
+            SizeX = sizeXIn;
+            SizeY = sizeYIn;
             CreateBoard();
         }
 

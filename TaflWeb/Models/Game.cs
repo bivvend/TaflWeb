@@ -98,7 +98,7 @@ namespace TaflWeb.Models
         public Game()
         {
             test = "Hello from API.";
-            board = new BoardModel();
+            board = new BoardModel(11, 11);
         }
         public void SetString(string value)
         {
