@@ -5,6 +5,40 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Content\attacktile1.bmp" />
+    <None Remove="Content\attacktile2.bmp" />
+    <None Remove="Content\attacktile3.bmp" />
+    <None Remove="Content\attacktile4.bmp" />
+    <None Remove="Content\deftile1.bmp" />
+    <None Remove="Content\deftile2.bmp" />
+    <None Remove="Content\deftile3.bmp" />
+    <None Remove="Content\deftile4.bmp" />
+    <None Remove="Content\throne.bmp" />
+    <None Remove="Content\tile1.bmp" />
+    <None Remove="Content\tile2.bmp" />
+    <None Remove="Content\tile3.bmp" />
+    <None Remove="Content\tile4.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Content\attacktile1.bmp" />
+    <Content Include="Content\attacktile2.bmp" />
+    <Content Include="Content\attacktile3.bmp" />
+    <Content Include="Content\attacktile4.bmp" />
+    <Content Include="Content\deftile1.bmp" />
+    <Content Include="Content\deftile2.bmp" />
+    <Content Include="Content\deftile3.bmp" />
+    <Content Include="Content\deftile4.bmp" />
+    <Content Include="Content\throne.bmp" />
+    <Content Include="Content\tile1.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\tile2.bmp" />
+    <Content Include="Content\tile3.bmp" />
+    <Content Include="Content\tile4.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
   </ItemGroup>
