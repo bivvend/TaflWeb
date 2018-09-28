@@ -33,3 +33,16 @@ D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\tile1.bmp
 D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\tile2.bmp
 D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\tile3.bmp
 D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\tile4.bmp
+C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\attacktile1.bmp
+C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\attacktile2.bmp
+C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\attacktile3.bmp
+C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\attacktile4.bmp
+C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\deftile1.bmp
+C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\deftile2.bmp
+C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\deftile3.bmp
+C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\deftile4.bmp
+C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\throne.bmp
+C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\tile1.bmp
+C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\tile2.bmp
+C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\tile3.bmp
+C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\tile4.bmp
