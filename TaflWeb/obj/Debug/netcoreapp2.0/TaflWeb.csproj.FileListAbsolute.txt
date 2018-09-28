@@ -20,4 +20,16 @@ D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\TaflWeb.runtimeconfig.dev.json
 D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\TaflWeb.dll
 D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\TaflWeb.pdb
 D:\Github\TaflWeb\TaflWeb\obj\Debug\netcoreapp2.0\TaflWeb.csprojResolveAssemblyReference.cache
-D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\Content\tile1.bmp
+D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\attacktile1.bmp
+D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\attacktile2.bmp
+D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\attacktile3.bmp
+D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\attacktile4.bmp
+D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\deftile1.bmp
+D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\deftile2.bmp
+D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\deftile3.bmp
+D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\deftile4.bmp
+D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\throne.bmp
+D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\tile1.bmp
+D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\tile2.bmp
+D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\tile3.bmp
+D:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\tile4.bmp

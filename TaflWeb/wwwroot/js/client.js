@@ -6,10 +6,11 @@
     var blockSizeX = null;
     var blockSizeY = null;
 
-    var sqImage = new Image(blockSizeX, blockSizeY);
+    var sqImage;
 
     function loadImages() {
-        sqImage.src = '/Content/tile1.bmp';
+        sqImage = new Image();
+        sqImage.src = "../Images/tile1.bmp";
         sqImage.onload = draw();
     }
 
