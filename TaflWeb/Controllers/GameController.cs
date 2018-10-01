@@ -36,6 +36,14 @@ namespace TaflWeb.Controllers
             return boardAsJson;
         }
 
+        [HttpGet]
+        [Route("api/[controller]/GetBoardVisualPattern")]
+        public async Task<string> GetBoardVisualPattern()
+        {
+            string boardAsJson = await game.GetBoardPatternAsJSON();
+            return boardAsJson;
+        }
+
         [HttpPost]
         [Route("api/[controller]/SetString")]
         public void SetString(string Text)

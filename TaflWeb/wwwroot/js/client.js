@@ -1,15 +1,27 @@
 ﻿$(document).ready(function () {
 
     var boardData = null;
+    var boardPatternData = null;
     var NUMER_OF_ROWS= 11;
     var NUMBER_OF_COLUMNS = 11;
     var blockSizeX = null;
     var blockSizeY = null;
 
+    var drawList = [];
+
     function getString() {
         $.ajax({
             url: "/api/Game/GetString", success: function (result) {
                 $("#currentValue").text(result);
+            }
+        });
+    }
+    function getBoardVisualData() {
+        $.ajax({
+            url: "/api/Game/GetBoardVisualPattern", success: function (result) {
+                $("#visualPattern").text(result);
+                boardPatternData = JSON.parse(result);
+                getBoardData();
             }
         });
     }
@@ -50,28 +62,41 @@
             }
 
             var numberOfElements = NUMBER_OF_COLUMNS * NUMER_OF_ROWS;
-
-            var drawnList = [];
+            drawList = [];
                         
-            for (let i = 0; i < NUMBER_OF_COLUMNS; i++){
+            for (let i = 0; i < NUMBER_OF_COLUMNS; i++){   //Use let to define local variables.
                 for (let j = 0; j < NUMER_OF_ROWS; j++){
                     var value = boardData.SquareTypeArray[i][j];
+                    var type = boardPatternData[i][j];
+                    var stringType = "1";  //Better to be explicit here 
+                    if (type == 0) {
+                        stringType = "1";
+                    }
+                    if (type == 1) {
+                        stringType = "2";
+                    }
+                    if (type == 2) {
+                        stringType = "3";
+                    }
+                    if (type == 3) {
+                        stringType = "4";
+                    }
                     var src;
                     switch (value) {
                         case 0:
-                            src = '../Images/tile1.bmp';
+                            src = '../Images/tile' + stringType + '.bmp';
                             break;
                         case 1:
                             src = '../Images/throne.bmp';
                             break;
                         case 2:
-                            src = '../Images/attacktile1.bmp';
+                            src = '../Images/attacktile' + stringType + '.bmp';
                             break;
                         case 3:
                             src = '../Images/throne.bmp';
                             break;
                         case 4:
-                            src = '../Images/deftile1.bmp';
+                            src = '../Images/deftile' + stringType + '.bmp';
                             break;
                         default:
                             src = '../Images/tile1.bmp';
@@ -83,8 +108,7 @@
                         var imageObj = new Image();
                         imageObj.src = srcIn;
                         imageObj.onload = function () {
-                            ctx.drawImage(imageObj, x * blockSizeX, y * blockSizeY, blockSizeX, blockSizeY);
-                            drawnList.add("1");
+                            ctx.drawImage(imageObj, x * blockSizeX, y * blockSizeY, blockSizeX, blockSizeY);                            
                         };
 
                     }
@@ -92,15 +116,20 @@
                     loadImage(src, i, j);
                    
                 }
-            }   
+            } 
+
+            //Need to wait for all images to be loaded before continuing to draw pieces
+
+            //Once pieces are drawn  need to add selections.  Need to work out transparency
+
+            //Finally draw borders etc...
             
         }
         else {
             alert("Canvas not supported!");
         }
     }
-
      
     getString();
-    getBoardData();
+    getBoardVisualData();  //Starts chain of AJAX requests towards rendering board.
 });

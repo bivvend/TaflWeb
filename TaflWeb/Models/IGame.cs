@@ -15,7 +15,9 @@ namespace TaflWeb.Models
 
         BoardModel board { get; set; }
 
-        Task<string> GetBoardAsJson(); //
+        Task<string> GetBoardAsJson(); //returns functional description as JSON
+
+        Task<string> GetBoardPatternAsJSON();  //returns the initial randomised view for visual interest.
 
         TurnState currentTurnState { get; set; }
 

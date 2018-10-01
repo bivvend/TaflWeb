@@ -259,6 +259,23 @@ namespace TaflWeb.Models
 
             return JsonConvert.SerializeObject(simpleBoard);
         }
+        /// <summary>
+        /// Returns the board tiles types as a JSON- used to vary the visual design a bit
+        /// </summary>
+        /// <returns></returns>
+        public string GetBoardPatternAsJSON()
+        {
+            Square.bare_tile_type[,] typeArray = new Square.bare_tile_type[SizeX, SizeY];
+
+            board.ToList().ForEach((item) =>
+            {
+                typeArray[item.Column, item.Row] = item.BareTileType;
+            });
+
+            return JsonConvert.SerializeObject(typeArray);
+
+
+        }
 
         private Square GetSquare(int Row, int Column)
         {

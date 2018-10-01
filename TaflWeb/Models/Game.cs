@@ -122,5 +122,14 @@ namespace TaflWeb.Models
             string boardString = await Task<string>.Factory.StartNew(()=>board.GetSimpleBoardAsJSON());
             return boardString;
         }
+
+        async public Task<string> GetBoardPatternAsJSON()
+        {
+            string boardViewString = await Task<string>.Factory.StartNew(() => board.GetBoardPatternAsJSON());
+            return boardViewString;
+        }
+        
+
+
     }
 }
