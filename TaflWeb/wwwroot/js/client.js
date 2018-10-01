@@ -7,8 +7,6 @@
     var blockSizeX = null;
     var blockSizeY = null;
 
-    var drawList = [];
-
     function getString() {
         $.ajax({
             url: "/api/Game/GetString", success: function (result) {
@@ -62,11 +60,13 @@
             }
 
             var numberOfElements = NUMBER_OF_COLUMNS * NUMER_OF_ROWS;
-            drawList = [];
+            var tileDrawArray = [];
+            var pieceDrawArray = [];
                         
             for (let i = 0; i < NUMBER_OF_COLUMNS; i++){   //Use let to define local variables.
                 for (let j = 0; j < NUMER_OF_ROWS; j++){
                     var value = boardData.SquareTypeArray[i][j];
+                    var pieceValue = boardData.OccupationArray[i][j];
                     var type = boardPatternData[i][j];
                     var stringType = "1";  //Better to be explicit here 
                     if (type == 0) {
@@ -101,28 +101,63 @@
                         default:
                             src = '../Images/tile1.bmp';
                             break
-                    }                    
+                    }  
 
-                    function loadImage(srcIn, x, y) {
-
-                        var imageObj = new Image();
-                        imageObj.src = srcIn;
-                        imageObj.onload = function () {
-                            ctx.drawImage(imageObj, x * blockSizeX, y * blockSizeY, blockSizeX, blockSizeY);                            
-                        };
-
+                    if (pieceValue != 3) {
+                        pieceDrawArray.push([src, i, j]);
                     }
 
-                    loadImage(src, i, j);
-                   
+                    tileDrawArray.push([src, i, j]);   //Create array of images to draw
+                    
+                  
                 }
             } 
 
             //Need to wait for all images to be loaded before continuing to draw pieces
+            //Create new list of Promises
 
-            //Once pieces are drawn  need to add selections.  Need to work out transparency
+            var promiseArray = [];
 
-            //Finally draw borders etc...
+            tileDrawArray.forEach(function (item) {
+                promiseArray.push(loadImage(item[0], item[1], item[2], false));
+            });
+
+            pieceDrawArray.forEach(function (item) {
+                promiseArray.push(loadImage(item[0], item[1], item[2], true));
+            });
+
+            function loadImage(url, x, y, isPiece) {
+                return new Promise((fulfill, reject) => {
+                    let imageObj = new Image();
+                    imageObj.src = url;
+                    imageObj.xValue = x; //Add extra properties to image object
+                    imageObj.yValue = y;
+                    imageObj.isPiece = isPiece;
+                    imageObj.onload = () => fulfill(imageObj);
+                });
+            }
+
+            // get images
+            Promise.all(promiseArray)
+                .then((images) => {
+                    // draw images to canvas
+                    images.forEach(function (img) {
+                        if (!img.isPiece) {
+                            ctx.drawImage(img, img.xValue * blockSizeX, img.yValue * blockSizeY, blockSizeX, blockSizeY);
+                        }
+                        else {
+                            ctx.beginPath();
+                            ctx.arc(img.xValue * blockSizeX + blockSizeX / 2, img.yValue * blockSizeY + blockSizeY / 2, 0.8 * (blockSizeX / 2) , 0, 2 * Math.PI);
+                            ctx.fillStyle = 'red';
+                            ctx.shadowColor = 'black';
+                            ctx.shadowBlur = 20;
+                            ctx.shadowOffsetX = 5;
+                            ctx.shadowOffsetY = 5;
+                            ctx.fill();
+                        }
+                    });
+                })
+                .catch((e) => alert(e));
             
         }
         else {

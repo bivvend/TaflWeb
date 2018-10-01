@@ -31,3 +31,16 @@ D:\Github\TaflWeb\TaflWeb.Test\obj\Debug\netcoreapp2.0\TaflWeb.Test.AssemblyInfo
 D:\Github\TaflWeb\TaflWeb.Test\obj\Debug\netcoreapp2.0\TaflWeb.Test.AssemblyInfo.cs
 D:\Github\TaflWeb\TaflWeb.Test\obj\Debug\netcoreapp2.0\TaflWeb.Test.dll
 D:\Github\TaflWeb\TaflWeb.Test\obj\Debug\netcoreapp2.0\TaflWeb.Test.pdb
+C:\Github\TaflWeb\TaflWeb.Test\bin\Debug\netcoreapp2.0\wwwroot\Images\attacktile1.bmp
+C:\Github\TaflWeb\TaflWeb.Test\bin\Debug\netcoreapp2.0\wwwroot\Images\attacktile2.bmp
+C:\Github\TaflWeb\TaflWeb.Test\bin\Debug\netcoreapp2.0\wwwroot\Images\attacktile3.bmp
+C:\Github\TaflWeb\TaflWeb.Test\bin\Debug\netcoreapp2.0\wwwroot\Images\attacktile4.bmp
+C:\Github\TaflWeb\TaflWeb.Test\bin\Debug\netcoreapp2.0\wwwroot\Images\deftile1.bmp
+C:\Github\TaflWeb\TaflWeb.Test\bin\Debug\netcoreapp2.0\wwwroot\Images\deftile2.bmp
+C:\Github\TaflWeb\TaflWeb.Test\bin\Debug\netcoreapp2.0\wwwroot\Images\deftile3.bmp
+C:\Github\TaflWeb\TaflWeb.Test\bin\Debug\netcoreapp2.0\wwwroot\Images\deftile4.bmp
+C:\Github\TaflWeb\TaflWeb.Test\bin\Debug\netcoreapp2.0\wwwroot\Images\throne.bmp
+C:\Github\TaflWeb\TaflWeb.Test\bin\Debug\netcoreapp2.0\wwwroot\Images\tile1.bmp
+C:\Github\TaflWeb\TaflWeb.Test\bin\Debug\netcoreapp2.0\wwwroot\Images\tile2.bmp
+C:\Github\TaflWeb\TaflWeb.Test\bin\Debug\netcoreapp2.0\wwwroot\Images\tile3.bmp
+C:\Github\TaflWeb\TaflWeb.Test\bin\Debug\netcoreapp2.0\wwwroot\Images\tile4.bmp
