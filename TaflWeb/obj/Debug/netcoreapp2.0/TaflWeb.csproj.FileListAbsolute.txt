@@ -46,3 +46,5 @@ C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\tile1.bmp
 C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\tile2.bmp
 C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\tile3.bmp
 C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\tile4.bmp
+C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\blueopal.jpg
+C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\fireopal.jpg

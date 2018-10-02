@@ -82,6 +82,8 @@
                         stringType = "4";
                     }
                     var src;
+                    var srcPiece;
+
                     switch (value) {
                         case 0:
                             src = '../Images/tile' + stringType + '.bmp';
@@ -103,8 +105,26 @@
                             break
                     }  
 
+                    switch (pieceValue) {
+                        case 0:
+                            srcPiece = '../Images/fireopal.jpg';
+                            break;
+                        case 1:
+                            srcPiece = '../Images/blueopal.jpg';
+                            break;
+                        case 2:
+                            srcPiece = '../Images/redopal.jpg';
+                            break;
+                        case 3:
+                            srcsPiece = src;
+                            break;
+                        default:
+                            srcPiece = src;
+                            break
+                    } 
+
                     if (pieceValue != 3) {
-                        pieceDrawArray.push([src, i, j]);
+                        pieceDrawArray.push([srcPiece, i, j]);
                     }
 
                     tileDrawArray.push([src, i, j]);   //Create array of images to draw
@@ -145,15 +165,27 @@
                         if (!img.isPiece) {
                             ctx.drawImage(img, img.xValue * blockSizeX, img.yValue * blockSizeY, blockSizeX, blockSizeY);
                         }
-                        else {
+                        else {                     
+
+                            
+
                             ctx.beginPath();
-                            ctx.arc(img.xValue * blockSizeX + blockSizeX / 2, img.yValue * blockSizeY + blockSizeY / 2, 0.8 * (blockSizeX / 2) , 0, 2 * Math.PI);
-                            ctx.fillStyle = 'red';
+                            ctx.arc(img.xValue * blockSizeX + blockSizeX / 2, img.yValue * blockSizeY + blockSizeY / 2, 0.8 * (blockSizeX / 2), 0, 2 * Math.PI);
+                            ctx.fillstyle = 'black';
                             ctx.shadowColor = 'black';
                             ctx.shadowBlur = 20;
                             ctx.shadowOffsetX = 5;
                             ctx.shadowOffsetY = 5;
                             ctx.fill();
+
+                            ctx.save();
+                            ctx.beginPath();
+                            ctx.arc(img.xValue * blockSizeX + blockSizeX / 2, img.yValue * blockSizeY + blockSizeY / 2, 0.8 * (blockSizeX / 2), 0, 2 * Math.PI);
+                            ctx.closePath();
+                            ctx.clip();
+
+                            ctx.drawImage(img, img.xValue * blockSizeX, img.yValue * blockSizeY, blockSizeX, blockSizeY);
+                            ctx.restore();
                         }
                     });
                 })
