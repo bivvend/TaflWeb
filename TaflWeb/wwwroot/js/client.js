@@ -2,6 +2,7 @@
 
     var boardData = null;
     var boardPatternData = null;
+    var boardSelectionData = null;
     var NUMER_OF_ROWS= 11;
     var NUMBER_OF_COLUMNS = 11;
     var blockSizeX = null;
@@ -19,10 +20,20 @@
             url: "/api/Game/GetBoardVisualPattern", success: function (result) {
                 $("#visualPattern").text(result);
                 boardPatternData = JSON.parse(result);
+                getBoardSelectionData();
+            }
+        });
+    }
+
+    function getBoardSelectionData() {
+        $.ajax({
+            url: "/api/Game/GetBoardSelections", success: function (result) {
+                boardSelectionData = JSON.parse(result);
                 getBoardData();
             }
         });
     }
+
     function getBoardData() {
         $.ajax({
             url: "/api/Game/GetBoard", success: function (result) {
@@ -35,6 +46,11 @@
 
     function boardClick(x, y) {
         var i = 0;
+        if (blockSizeX != undefined && blockSizeY != undefined && blockSizeX > 0 && blockSizeY > 0) {
+            $("#clickColumn").text("Column: " + Math.floor(x / blockSizeX));
+            $("#clickRow").text("Row: " +  Math.floor(y / blockSizeY));
+        }
+
     }
     
     function draw() {
@@ -68,6 +84,9 @@
                     var value = boardData.SquareTypeArray[i][j];
                     var pieceValue = boardData.OccupationArray[i][j];
                     var type = boardPatternData[i][j];
+                    var selected = boardSelectionData[i][j].selected;
+                    var highlighted = boardSelectionData[i][j].highlighted;
+                    
                     var stringType = "1";  //Better to be explicit here 
                     if (type == 0) {
                         stringType = "1";
@@ -107,13 +126,13 @@
 
                     switch (pieceValue) {
                         case 0:
-                            srcPiece = '../Images/fireopal.jpg';
-                            break;
-                        case 1:
                             srcPiece = '../Images/blueopal.jpg';
                             break;
-                        case 2:
+                        case 1:
                             srcPiece = '../Images/redopal.jpg';
+                            break;
+                        case 2:
+                            srcPiece = '../Images/fireopal.jpg';
                             break;
                         case 3:
                             srcsPiece = src;
@@ -127,7 +146,7 @@
                         pieceDrawArray.push([srcPiece, i, j]);
                     }
 
-                    tileDrawArray.push([src, i, j]);   //Create array of images to draw
+                    tileDrawArray.push([src, i, j, selected, highlighted]);   //Create array of images to draw
                     
                   
                 }
@@ -139,36 +158,43 @@
             var promiseArray = [];
 
             tileDrawArray.forEach(function (item) {
-                promiseArray.push(loadImage(item[0], item[1], item[2], false));
+                promiseArray.push(loadImage(item[0], item[1], item[2], false, item[3], item[4]));
             });
 
             pieceDrawArray.forEach(function (item) {
-                promiseArray.push(loadImage(item[0], item[1], item[2], true));
+                promiseArray.push(loadImage(item[0], item[1], item[2], true, false, false));
             });
 
-            function loadImage(url, x, y, isPiece) {
+            function loadImage(url, x, y, isPiece, squareHighlighted, squareSelected) {
                 return new Promise((fulfill, reject) => {
                     let imageObj = new Image();
                     imageObj.src = url;
                     imageObj.xValue = x; //Add extra properties to image object
                     imageObj.yValue = y;
                     imageObj.isPiece = isPiece;
+                    imageObj.selected = squareSelected;
+                    imageObj.highlighted = squareHighlighted;
                     imageObj.onload = () => fulfill(imageObj);
                 });
             }
 
-            // get images
+            // get images in promise array
             Promise.all(promiseArray)
                 .then((images) => {
                     // draw images to canvas
                     images.forEach(function (img) {
                         if (!img.isPiece) {
                             ctx.drawImage(img, img.xValue * blockSizeX, img.yValue * blockSizeY, blockSizeX, blockSizeY);
+                            if (img.highlighted) {
+                                //Draw a selection rectangle
+                                ctx.beginPath();  
+                                ctx.rect(img.xValue * blockSizeX, img.yValue * blockSizeY, blockSizeX, blockSizeY);
+                                ctx.closePath();
+                                ctx.stroke();
+                            }
                         }
-                        else {                     
-
-                            
-
+                        else {     
+                            //Draw outline with shadow
                             ctx.beginPath();
                             ctx.arc(img.xValue * blockSizeX + blockSizeX / 2, img.yValue * blockSizeY + blockSizeY / 2, 0.8 * (blockSizeX / 2), 0, 2 * Math.PI);
                             ctx.fillstyle = 'black';
@@ -177,16 +203,19 @@
                             ctx.shadowOffsetX = 5;
                             ctx.shadowOffsetY = 5;
                             ctx.fill();
-
+                            //Clip region to draw piece
                             ctx.save();
                             ctx.beginPath();
                             ctx.arc(img.xValue * blockSizeX + blockSizeX / 2, img.yValue * blockSizeY + blockSizeY / 2, 0.8 * (blockSizeX / 2), 0, 2 * Math.PI);
                             ctx.closePath();
                             ctx.clip();
-
+                            //Draw image onto clipped region
                             ctx.drawImage(img, img.xValue * blockSizeX, img.yValue * blockSizeY, blockSizeX, blockSizeY);
                             ctx.restore();
                         }
+
+                        
+
                     });
                 })
                 .catch((e) => alert(e));

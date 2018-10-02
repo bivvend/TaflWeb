@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaflWeb.Model.Classes;
+using TaflWeb.Models.Classes;
 
 namespace TaflWeb.Models
 {
@@ -245,7 +246,7 @@ namespace TaflWeb.Models
         }
 
         public string GetSimpleBoardAsJSON()
-        {            
+        {
 
             SimpleBoard simpleBoard = new SimpleBoard();
             simpleBoard.SquareTypeArray = new Square.square_type[SizeX, SizeY];
@@ -273,7 +274,24 @@ namespace TaflWeb.Models
             });
 
             return JsonConvert.SerializeObject(typeArray);
+        }
 
+        
+
+        public string GetSelectionsAndHighlightsAsJSON()
+        {
+            SelectionTransferObject[,] selectionHighlightArray = new SelectionTransferObject[SizeX, SizeY];
+
+            board.ToList().ForEach((item) =>
+            {
+                selectionHighlightArray[item.Column, item.Row] = new SelectionTransferObject() { selected = item.Selected, highlighted = item.Highlighted };                
+            });
+
+            ///DEBUG TEST
+            ///
+            selectionHighlightArray[2,1] = new SelectionTransferObject(){ selected = false, highlighted = true};
+
+            return JsonConvert.SerializeObject(selectionHighlightArray);
 
         }
 

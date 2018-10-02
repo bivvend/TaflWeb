@@ -116,17 +116,29 @@ namespace TaflWeb.Models
             await Task.Delay(200);
             return move;
         }
-
+        /// <summary>
+        /// Returns the situation of the board (tile types and occupations)
+        /// </summary>
+        /// <returns></returns>
         async public Task<string> GetBoardAsJson()
         {
             string boardString = await Task<string>.Factory.StartNew(()=>board.GetSimpleBoardAsJSON());
             return boardString;
         }
-
+        /// <summary>
+        /// Returns the image number within the set of similar images to give visual diversity to board
+        /// </summary>
+        /// <returns></returns>
         async public Task<string> GetBoardPatternAsJSON()
         {
             string boardViewString = await Task<string>.Factory.StartNew(() => board.GetBoardPatternAsJSON());
             return boardViewString;
+        }
+
+        async public Task<string> GetSelectionsAndHighlightsAsJSON()
+        {
+            string boardSelectionString = await Task<string>.Factory.StartNew(() => board.GetSelectionsAndHighlightsAsJSON());
+            return boardSelectionString;
         }
         
 

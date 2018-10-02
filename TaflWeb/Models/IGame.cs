@@ -19,6 +19,8 @@ namespace TaflWeb.Models
 
         Task<string> GetBoardPatternAsJSON();  //returns the initial randomised view for visual interest.
 
+        Task<string> GetSelectionsAndHighlightsAsJSON(); //returns the current selections as Json
+
         TurnState currentTurnState { get; set; }
 
         bool attackerIsAI { get; set; }
