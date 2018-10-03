@@ -289,7 +289,7 @@ namespace TaflWeb.Models
 
             ///DEBUG TEST
             ///
-            selectionHighlightArray[2,1] = new SelectionTransferObject(){ selected = false, highlighted = true};
+            //selectionHighlightArray[2,1] = new SelectionTransferObject(){ selected = false, highlighted = true};
 
             return JsonConvert.SerializeObject(selectionHighlightArray);
 

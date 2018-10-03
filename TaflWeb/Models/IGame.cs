@@ -21,6 +21,10 @@ namespace TaflWeb.Models
 
         Task<string> GetSelectionsAndHighlightsAsJSON(); //returns the current selections as Json
 
+        string GetPlayStateAsJson(); //Returns the current status of the game (who's turn etc)
+
+        string SquareClickResponse(int column, int row); // Return infomation to client regarding result of click (getting far too server side here!)
+
         TurnState currentTurnState { get; set; }
 
         bool attackerIsAI { get; set; }

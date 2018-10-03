@@ -3,6 +3,7 @@
     var boardData = null;
     var boardPatternData = null;
     var boardSelectionData = null;
+    var playState = null;
     var NUMER_OF_ROWS= 11;
     var NUMBER_OF_COLUMNS = 11;
     var blockSizeX = null;
@@ -39,16 +40,48 @@
             url: "/api/Game/GetBoard", success: function (result) {
                 $("#jsonBoard").text(result);
                 boardData = JSON.parse(result);
-                draw();
+                getPlayState();
             }
         }); 
+    }
+
+    function getPlayState() {
+        $.ajax({
+            url: "/api/Game/GetPlayState", success: function (result) {
+                playState = JSON.parse(result);
+                $("#attackerIsAI").text("Attacker is AI: " + playState.attackerIsAI);
+                $("#defenderIsAI").text("Defender is AI: " + playState.defenderIsAI);
+                $("#turnStatus").text("Turn State: " + playState.turnState);
+                draw();
+            }
+        });
     }
 
     function boardClick(x, y) {
         var i = 0;
         if (blockSizeX != undefined && blockSizeY != undefined && blockSizeX > 0 && blockSizeY > 0) {
-            $("#clickColumn").text("Column: " + Math.floor(x / blockSizeX));
-            $("#clickRow").text("Row: " +  Math.floor(y / blockSizeY));
+
+            var column = Math.floor(x / blockSizeX);
+            var row = Math.floor(y / blockSizeY);
+            $("#clickColumn").text("Column: " + column);
+            $("#clickRow").text("Row: " + row);
+
+            //request response from server regarding result of this click
+
+            $.ajax({
+                type: "POST",
+                url: "/api/Game/SquareClick",
+                data: [column, row],
+                success: function (response) {
+                    console.log(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });  
         }
 
     }
@@ -126,7 +159,7 @@
 
                     switch (pieceValue) {
                         case 0:
-                            srcPiece = '../Images/blueopal.jpg';
+                            srcPiece = '../Images/blueopal.bmp';
                             break;
                         case 1:
                             srcPiece = '../Images/redopal.jpg';
@@ -192,7 +225,7 @@
                         var angle = Math.random();
                         if (!img.isPiece) {                            
                             ctx.drawImage(img, img.xValue * blockSizeX, img.yValue * blockSizeY, blockSizeX, blockSizeY);
-                            if (img.highlighted) {
+                            if (img.highlighted || img.selected) {
                                 //Draw a selection rectangle
                                 ctx.beginPath();
                                 ctx.strokeStyle = 'yellow';

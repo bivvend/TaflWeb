@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaflWeb.Model.AI;
 using TaflWeb.Model.Classes;
+using TaflWeb.Models.Classes;
 using static TaflWeb.Models.Classes.TurnDefinitions;
 
 namespace TaflWeb.Models
@@ -141,6 +143,18 @@ namespace TaflWeb.Models
             return boardSelectionString;
         }
         
+        public string GetPlayStateAsJson()
+        {
+            GameStateTransferObject state = new GameStateTransferObject() { attackerIsAI = this.attackerIsAI, defenderIsAI = this.defenderIsAI, turnState = this.currentTurnState };
+            string json = JsonConvert.SerializeObject(state);
+            return json;
+        }
+
+        public string SquareClickResponse(int column, int row)
+        {
+
+            return "hello";
+        }
 
 
     }

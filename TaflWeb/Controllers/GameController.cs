@@ -52,6 +52,22 @@ namespace TaflWeb.Controllers
             return boardAsJson;
         }
 
+        [HttpGet]
+        [Route("api/[controller]/GetPlayState")]
+        public async Task<string> GetPlayState()
+        {
+            string stateAsJson = await Task<string>.Factory.StartNew(() => game.GetPlayStateAsJson());
+            return stateAsJson;
+        }
+
+        [HttpPost]
+        [Route("api/[controller]/SquareClick")]
+        public async Task<string> SquareClick(int column, int row)
+        {
+            string responseJSon = await Task<string>.Factory.StartNew(() => game.SquareClickResponse(column, row));
+            return responseJSon;
+        }
+
 
 
         [HttpPost]
