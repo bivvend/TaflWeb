@@ -9,6 +9,13 @@
     var blockSizeX = null;
     var blockSizeY = null;
 
+    //Click needs to be registered to jQuery object not DOM object
+    $("#boardImage").click(function (e) {
+        mouseX = e.pageX - $("#boardImage").offset().left;
+        mouseY = e.pageY - $("#boardImage").offset().top;
+        boardClick(mouseX, mouseY);
+    });
+
     function getString() {
         $.ajax({
             url: "/api/Game/GetString", success: function (result) {
@@ -71,9 +78,10 @@
             $.ajax({
                 type: "POST",
                 url: "/api/Game/SquareClick",
-                data: [column, row],
+                data: { column, row },
                 success: function (response) {
                     console.log(response);
+                    getBoardVisualData(); 
                 },
                 failure: function (response) {
                     alert(response.responseText);
@@ -89,12 +97,7 @@
     function draw() {
         
         var canvas = $("#boardImage")[0];  //Need to get DOM object
-        //Click needs to be registered to jQuery object not DOM object
-        $("#boardImage").click(function (e) {
-            mouseX = e.pageX - $("#boardImage").offset().left;
-            mouseY = e.pageY - $("#boardImage").offset().top;
-            boardClick(mouseX, mouseY);
-        });
+       
         // Canvas supported?
         if (canvas.getContext) {
             var ctx = canvas.getContext('2d');
@@ -222,7 +225,7 @@
                         ctx.shadowOffsetX = 0;
                         ctx.shadowOffsetY = 0;
                         ctx.lineWidth = 1;
-                        var angle = Math.random();
+                        var angle = Math.random() * 2 * Math.PI;
                         if (!img.isPiece) {                            
                             ctx.drawImage(img, img.xValue * blockSizeX, img.yValue * blockSizeY, blockSizeX, blockSizeY);
                             if (img.highlighted || img.selected) {
@@ -243,7 +246,7 @@
                             //Draw outline with shadow
                             ctx.beginPath();
                             ctx.arc(img.xValue * blockSizeX + blockSizeX / 2, img.yValue * blockSizeY + blockSizeY / 2, 0.8 * (blockSizeX / 2), 0, 2 * Math.PI);
-                            ctx.fillstyle = 'black';
+                            ctx.fillStyle = 'black';
                             ctx.shadowColor = 'black';
                             ctx.shadowBlur = 20;
                             ctx.shadowOffsetX = 5;
@@ -255,11 +258,25 @@
                             ctx.arc(img.xValue * blockSizeX + blockSizeX / 2, img.yValue * blockSizeY + blockSizeY / 2, 0.8 * (blockSizeX / 2), 0, 2 * Math.PI);
                             ctx.closePath();
                             ctx.clip();
-                            //ctx.rotate(angle);
-                            //ctx.translate();
                             //Draw image onto clipped region
                             ctx.drawImage(img, img.xValue * blockSizeX, img.yValue * blockSizeY, blockSizeX, blockSizeY);
                             ctx.restore();
+                            //draw reflection
+                            ctx.globalAlpha = 0.3;
+                            ctx.fillStyle = 'white';                            
+                            ctx.strokeStyle = 'white';
+                            ctx.shadowColor = 'white';
+                            ctx.shadowBlur = 10;
+                            ctx.shadowOffsetX = 0;
+                            ctx.shadowOffsetY = 0;
+                            ctx.beginPath();
+                            ctx.arc(img.xValue * blockSizeX + blockSizeX / 3, img.yValue * blockSizeY + blockSizeY / 3, 0.1 * (blockSizeX / 2), 0, 2 * Math.PI);
+                            ctx.closePath();
+                            ctx.fill();
+                            ctx.globalAlpha = 1.0;
+                           
+
+
                         }
 
                         

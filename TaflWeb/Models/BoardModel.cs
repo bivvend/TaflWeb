@@ -295,7 +295,7 @@ namespace TaflWeb.Models
 
         }
 
-        private Square GetSquare(int Row, int Column)
+        public Square GetSquare(int Row, int Column)
         {
             Square squareFound = null;
 

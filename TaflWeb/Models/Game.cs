@@ -152,8 +152,13 @@ namespace TaflWeb.Models
 
         public string SquareClickResponse(int column, int row)
         {
-
-            return "hello";
+            Square clickedSquare = board.GetSquare(row, column);
+            if(clickedSquare != null)
+            {
+                clickedSquare.Highlighted = true;
+            }
+            return "Found";
+          
         }
 
 
