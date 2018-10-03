@@ -158,7 +158,7 @@
             var promiseArray = [];
 
             tileDrawArray.forEach(function (item) {
-                promiseArray.push(loadImage(item[0], item[1], item[2], false, item[3], item[4]));
+                promiseArray.push(loadImage(item[0], item[1], item[2], false, item[4], item[5]));
             });
 
             pieceDrawArray.forEach(function (item) {
@@ -183,12 +183,25 @@
                 .then((images) => {
                     // draw images to canvas
                     images.forEach(function (img) {
-                        if (!img.isPiece) {
+                        ctx.strokeStyle = 'black';
+                        ctx.shadowColor = 'black';
+                        ctx.shadowBlur = 0;
+                        ctx.shadowOffsetX = 0;
+                        ctx.shadowOffsetY = 0;
+                        ctx.lineWidth = 1;
+                        var angle = Math.random();
+                        if (!img.isPiece) {                            
                             ctx.drawImage(img, img.xValue * blockSizeX, img.yValue * blockSizeY, blockSizeX, blockSizeY);
                             if (img.highlighted) {
                                 //Draw a selection rectangle
-                                ctx.beginPath();  
-                                ctx.rect(img.xValue * blockSizeX, img.yValue * blockSizeY, blockSizeX, blockSizeY);
+                                ctx.beginPath();
+                                ctx.strokeStyle = 'yellow';
+                                ctx.shadowColor = 'yellow';
+                                ctx.lineWidth = 5;
+                                ctx.shadowBlur = 20;
+                                ctx.shadowOffsetX = 0;
+                                ctx.shadowOffsetY = 0;
+                                ctx.rect(img.xValue * blockSizeX + 3, img.yValue * blockSizeY + 3, blockSizeX - 6, blockSizeY - 6);
                                 ctx.closePath();
                                 ctx.stroke();
                             }
@@ -209,6 +222,8 @@
                             ctx.arc(img.xValue * blockSizeX + blockSizeX / 2, img.yValue * blockSizeY + blockSizeY / 2, 0.8 * (blockSizeX / 2), 0, 2 * Math.PI);
                             ctx.closePath();
                             ctx.clip();
+                            //ctx.rotate(angle);
+                            //ctx.translate();
                             //Draw image onto clipped region
                             ctx.drawImage(img, img.xValue * blockSizeX, img.yValue * blockSizeY, blockSizeX, blockSizeY);
                             ctx.restore();
