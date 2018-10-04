@@ -153,12 +153,42 @@ namespace TaflWeb.Models
         public string SquareClickResponse(int column, int row)
         {
             Square clickedSquare = board.GetSquare(row, column);
+            ClickResponseTransferObject responseObj = new ClickResponseTransferObject() { responseText = ClickResponseTransferObject.NO_PIECE_FOUND, requestReDraw = false };
             if(clickedSquare != null)
             {
-                clickedSquare.Highlighted = true;
+                //Check to see if square is occupied
+                if(currentTurnState == TurnState.VictoryAttacker || currentTurnState == TurnState.VictoryDefender)
+                {
+                    responseObj.requestReDraw = false;
+                    responseObj.responseText = ClickResponseTransferObject.NOT_A_VALID_SQUARE;
+                    return JsonConvert.SerializeObject(responseObj);
+                }
+                if(clickedSquare.AttackerPresent && currentTurnState == TurnState.Attacker && !attackerIsAI)
+                {
+                    clickedSquare.Selected = true;
+                    responseObj.responseText = ClickResponseTransferObject.PIECE_FOUND_SELECTING;
+                    responseObj.requestReDraw = true;
+                    return JsonConvert.SerializeObject(responseObj);
+
+                }
+                if (clickedSquare.DefenderPresent && currentTurnState == TurnState.Defender && !defenderIsAI)
+                {
+                    clickedSquare.Selected = true;
+                    responseObj.requestReDraw = true;
+                    responseObj.responseText = ClickResponseTransferObject.PIECE_FOUND_SELECTING;
+                    return JsonConvert.SerializeObject(responseObj);
+                }
             }
-            return "Found";
-          
+            else
+            {
+                responseObj.requestReDraw = false;
+                responseObj.responseText= ClickResponseTransferObject.NOT_A_VALID_SQUARE;
+                return  JsonConvert.SerializeObject(responseObj);
+            }
+
+            
+            return JsonConvert.SerializeObject(responseObj); //  catch
+
         }
 
 

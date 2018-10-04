@@ -80,8 +80,14 @@
                 url: "/api/Game/SquareClick",
                 data: { column, row },
                 success: function (response) {
-                    console.log(response);
-                    getBoardVisualData(); 
+                    var respObj = JSON.parse(response);
+                    $("#lastResponse").text("Last response: " + respObj.responseText);
+                    console.log(respObj.responseText);
+                    if (respObj.requestReDraw) {
+
+                        getBoardVisualData(); // starts redraw cascade
+                    }
+
                 },
                 failure: function (response) {
                     alert(response.responseText);
@@ -122,6 +128,9 @@
                     var type = boardPatternData[i][j];
                     var selected = boardSelectionData[i][j].selected;
                     var highlighted = boardSelectionData[i][j].highlighted;
+
+                    if (selected)
+                        var sfffa = "test";
                     
                     var stringType = "1";  //Better to be explicit here 
                     if (type == 0) {
@@ -182,7 +191,7 @@
                         pieceDrawArray.push([srcPiece, i, j]);
                     }
 
-                    tileDrawArray.push([src, i, j, selected, highlighted]);   //Create array of images to draw
+                    tileDrawArray.push([src, i, j, highlighted, selected]);   //Create array of images to draw
                     
                   
                 }
