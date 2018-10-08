@@ -19,6 +19,7 @@ namespace TaflWeb.Controllers
         public GameController(IGame gameIn)
         {
             game = gameIn;
+            //game = new Game();
         }
 
         [HttpGet]

@@ -19,14 +19,12 @@
     function getString() {
         $.ajax({
             url: "/api/Game/GetString", success: function (result) {
-                $("#currentValue").text(result);
             }
         });
     }
     function getBoardVisualData() {
         $.ajax({
             url: "/api/Game/GetBoardVisualPattern", success: function (result) {
-                $("#visualPattern").text(result);
                 boardPatternData = JSON.parse(result);
                 getBoardSelectionData();
             }
@@ -45,7 +43,6 @@
     function getBoardData() {
         $.ajax({
             url: "/api/Game/GetBoard", success: function (result) {
-                $("#jsonBoard").text(result);
                 boardData = JSON.parse(result);
                 getPlayState();
             }
@@ -81,7 +78,7 @@
                 data: { column, row },
                 success: function (response) {
                     var respObj = JSON.parse(response);
-                    $("#lastResponse").text("Last response: " + respObj.responseText);
+                    //$("#lastResponse").text("Last response: " + respObj.responseText);
                     console.log(respObj.responseText);
                     if (respObj.requestReDraw) {
 

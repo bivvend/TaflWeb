@@ -10,8 +10,14 @@ namespace TaflWeb.Controllers
     public class GameBoardController : Controller
     {
 
-        private IGame game { get; set; }
-        public GameBoardController(IGame gameIn) => game = gameIn;
+        //private IGame game { get; set; }
+        //public GameBoardController(IGame gameIn) => game = gameIn;
+
+        public GameBoardController()
+        {
+
+        }
+
         public IActionResult CurrentBoard()
         {
             return View();
