@@ -120,18 +120,21 @@
             var numberOfElements = NUMBER_OF_COLUMNS * NUMER_OF_ROWS;
             var tileDrawArray = [];
             var pieceDrawArray = [];
+
+            var value = 0;
+            var pieceValue = 0;
+            var type = 0;
+            var selected = false;
+            var highlighted = false;
                         
             for (let i = 0; i < NUMBER_OF_COLUMNS; i++){   //Use let to define local variables.
                 for (let j = 0; j < NUMER_OF_ROWS; j++){
-                    var value = boardData.SquareTypeArray[i][j];
-                    var pieceValue = boardData.OccupationArray[i][j];
-                    var type = boardPatternData[i][j];
-                    var selected = boardSelectionData[i][j].selected;
-                    var highlighted = boardSelectionData[i][j].highlighted;
-
-                    if (selected)
-                        var sfffa = "test";
-                    
+                    value = boardData.SquareTypeArray[i][j];
+                    pieceValue = boardData.OccupationArray[i][j];
+                    type = boardPatternData[i][j];
+                    selected = boardSelectionData[i][j].selected;
+                    highlighted = boardSelectionData[i][j].highlighted;
+                      
                     var stringType = "1";  //Better to be explicit here 
                     if (type == 0) {
                         stringType = "1";
@@ -191,6 +194,11 @@
                         pieceDrawArray.push([srcPiece, i, j]);
                     }
 
+                    console.log("S");
+                    console.log(typeof selected);
+                    console.log("H");
+                    console.log(typeof highlighted);
+
                     tileDrawArray.push([src, i, j, highlighted, selected]);   //Create array of images to draw
                     
                   
@@ -203,7 +211,7 @@
             var promiseArray = [];
 
             tileDrawArray.forEach(function (item) {
-                promiseArray.push(loadImage(item[0], item[1], item[2], false, item[4], item[5]));
+                promiseArray.push(loadImage(item[0], item[1], item[2], false, item[3], item[4]));
             });
 
             pieceDrawArray.forEach(function (item) {
@@ -237,6 +245,7 @@
                         var angle = Math.random() * 2 * Math.PI;
                         if (!img.isPiece) {                            
                             ctx.drawImage(img, img.xValue * blockSizeX, img.yValue * blockSizeY, blockSizeX, blockSizeY);
+
                             if (img.highlighted || img.selected) {
                                 //Draw a selection rectangle
                                 ctx.beginPath();
