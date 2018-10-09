@@ -1,10 +1,7 @@
 ﻿$(document).ready(function () {
 
     var boardData = null;
-    var boardPatternData = null;
-    var boardSelectionData = null;
-    var playState = null;
-    var NUMER_OF_ROWS= 11;
+    var NUMBER_OF_ROWS= 11;
     var NUMBER_OF_COLUMNS = 11;
     var blockSizeX = null;
     var blockSizeY = null;
@@ -16,49 +13,28 @@
         boardClick(mouseX, mouseY);
     });
 
-    function getString() {
-        $.ajax({
-            url: "/api/Game/GetString", success: function (result) {
-            }
-        });
-    }
-    function getBoardVisualData() {
-        $.ajax({
-            url: "/api/Game/GetBoardVisualPattern", success: function (result) {
-                boardPatternData = JSON.parse(result);
-                getBoardSelectionData();
-            }
-        });
-    }
-
-    function getBoardSelectionData() {
-        $.ajax({
-            url: "/api/Game/GetBoardSelections", success: function (result) {
-                boardSelectionData = JSON.parse(result);
-                getBoardData();
-            }
-        });
-    }
-
     function getBoardData() {
         $.ajax({
             url: "/api/Game/GetBoard", success: function (result) {
                 boardData = JSON.parse(result);
-                getPlayState();
+
+                //playState = JSON.parse(result);
+                //$("#attackerIsAI").text("Attacker is AI: " + playState.attackerIsAI);
+                //$("#defenderIsAI").text("Defender is AI: " + playState.defenderIsAI);
+                //$("#turnStatus").text("Turn State: " + playState.turnState);
+                NUMBER_OF_COLUMNS = boardData.board.SizeX;
+                NUMBER_OF_ROWS = boardData.board.SizeY;
+                //getSquare(0, 0);
+                draw();
             }
         }); 
     }
 
-    function getPlayState() {
-        $.ajax({
-            url: "/api/Game/GetPlayState", success: function (result) {
-                playState = JSON.parse(result);
-                $("#attackerIsAI").text("Attacker is AI: " + playState.attackerIsAI);
-                $("#defenderIsAI").text("Defender is AI: " + playState.defenderIsAI);
-                $("#turnStatus").text("Turn State: " + playState.turnState);
-                draw();
-            }
-        });
+    function getSquare(column, row) {
+        var num = (NUMBER_OF_COLUMNS * row) + column;
+        var theSquare = boardData.board.board[num];
+        return theSquare;
+
     }
 
     function boardClick(x, y) {
@@ -78,11 +54,13 @@
                 data: { column, row },
                 success: function (response) {
                     var respObj = JSON.parse(response);
+                    //SHOULD CONTAIN RESPONSE + THE NEW BOARD AFTER CLICKING
+
                     //$("#lastResponse").text("Last response: " + respObj.responseText);
                     console.log(respObj.responseText);
                     if (respObj.requestReDraw) {
 
-                        getBoardVisualData(); // starts redraw cascade
+                        draw();
                     }
 
                 },
@@ -105,16 +83,16 @@
         if (canvas.getContext) {
             var ctx = canvas.getContext('2d');
 
-            if (NUMBER_OF_COLUMNS != 0 && NUMER_OF_ROWS != 0) {
+            if (NUMBER_OF_COLUMNS != 0 && NUMBER_OF_ROWS != 0) {
                 blockSizeX = Math.round(canvas.width / NUMBER_OF_COLUMNS) - 1;
-                blockSizeY = Math.round(canvas.height / NUMER_OF_ROWS) - 1;
+                blockSizeY = Math.round(canvas.height / NUMBER_OF_ROWS) - 1;
             }
             else {
                 blockSizeX = 80;
                 blockSizeY = 80;
             }
 
-            var numberOfElements = NUMBER_OF_COLUMNS * NUMER_OF_ROWS;
+            var numberOfElements = NUMBER_OF_COLUMNS * NUMBER_OF_ROWS;
             var tileDrawArray = [];
             var pieceDrawArray = [];
 
@@ -123,14 +101,18 @@
             var type = 0;
             var selected = false;
             var highlighted = false;
+            var square;
                         
             for (let i = 0; i < NUMBER_OF_COLUMNS; i++){   //Use let to define local variables.
-                for (let j = 0; j < NUMER_OF_ROWS; j++){
-                    value = boardData.SquareTypeArray[i][j];
-                    pieceValue = boardData.OccupationArray[i][j];
-                    type = boardPatternData[i][j];
-                    selected = boardSelectionData[i][j].selected;
-                    highlighted = boardSelectionData[i][j].highlighted;
+                for (let j = 0; j < NUMBER_OF_ROWS; j++){
+
+                    square = getSquare(i, j);
+                    boardData;
+                    value = square.SquareType;
+                    pieceValue = square.Occupation;
+                    type = square.BareTileType;
+                    selected = square.Selected;
+                    highlighted = square.Highlighted;
                       
                     var stringType = "1";  //Better to be explicit here 
                     if (type == 0) {
@@ -196,8 +178,7 @@
                     console.log("H");
                     console.log(typeof highlighted);
 
-                    tileDrawArray.push([src, i, j, highlighted, selected]);   //Create array of images to draw
-                    
+                    tileDrawArray.push([src, i, j, highlighted, selected]);   //Create array of images to draw                    
                   
                 }
             } 
@@ -306,6 +287,5 @@
         }
     }
      
-    getString();
-    getBoardVisualData();  //Starts chain of AJAX requests towards rendering board.
+    getBoardData();
 });

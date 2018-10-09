@@ -15,11 +15,11 @@ namespace TaflWeb.Controllers
     public class GameController : Controller
     {
         private IGame game { get; set; }
-        
+
         public GameController(IGame gameIn)
         {
             game = gameIn;
-            //game = new Game();
+
         }
 
         [HttpGet]
@@ -28,38 +28,18 @@ namespace TaflWeb.Controllers
         {
             return game.GetString();
         }
-
+        /// <summary>
+        /// Return the just created board object 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("api/[controller]/GetBoard")]
         public async Task<string> GetBoard()
         {
-            string boardAsJson =  await game.GetBoardAsJson();
+            string boardAsJson = await Task<string>.Run(() => game.GetBoardAsJson());
             return boardAsJson;
         }
 
-        [HttpGet]
-        [Route("api/[controller]/GetBoardVisualPattern")]
-        public async Task<string> GetBoardVisualPattern()
-        {
-            string boardAsJson = await game.GetBoardPatternAsJSON();
-            return boardAsJson;
-        }
-
-        [HttpGet]
-        [Route("api/[controller]/GetBoardSelections")]
-        public async Task<string> GetBoardSelections()
-        {
-            string boardAsJson = await game.GetSelectionsAndHighlightsAsJSON();
-            return boardAsJson;
-        }
-
-        [HttpGet]
-        [Route("api/[controller]/GetPlayState")]
-        public async Task<string> GetPlayState()
-        {
-            string stateAsJson = await Task<string>.Factory.StartNew(() => game.GetPlayStateAsJson());
-            return stateAsJson;
-        }
 
         [HttpPost]
         [Route("api/[controller]/SquareClick")]
@@ -68,14 +48,7 @@ namespace TaflWeb.Controllers
             string responseJSon = await Task<string>.Factory.StartNew(() => game.SquareClickResponse(column, row));
             return responseJSon;
         }
-
-
-
-        [HttpPost]
-        [Route("api/[controller]/SetString")]
-        public void SetString(string Text)
-        {
-            game.SetString(Text);
-        }
     }
+
+
 }

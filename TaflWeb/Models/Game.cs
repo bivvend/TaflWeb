@@ -12,7 +12,6 @@ namespace TaflWeb.Models
 {
     public class Game : IGame
     {
-        private string test { get; set; }
 
         private Sage _sage;
         public Sage sage   //Sage evalutes the move tree
@@ -112,17 +111,19 @@ namespace TaflWeb.Models
    
         public Game()
         {
-            test = "Hello from API.";
+            
             board = new BoardModel(11, 11);
-        }
-        public void SetString(string value)
-        {
-            test = value;
         }
 
         public string GetString()
         {
-            return test;
+            return "TaflWeb";
+        }
+
+        public string GetBoardAsJson()
+        {
+            string response = JsonConvert.SerializeObject(this);
+            return response;
         }
 
         async public Task<Move> RunAITurn(SimpleBoard startBoard)
@@ -131,37 +132,7 @@ namespace TaflWeb.Models
             await Task.Delay(200);
             return move;
         }
-        /// <summary>
-        /// Returns the situation of the board (tile types and occupations)
-        /// </summary>
-        /// <returns></returns>
-        async public Task<string> GetBoardAsJson()
-        {
-            string boardString = await Task<string>.Factory.StartNew(()=>board.GetSimpleBoardAsJSON());
-            return boardString;
-        }
-        /// <summary>
-        /// Returns the image number within the set of similar images to give visual diversity to board
-        /// </summary>
-        /// <returns></returns>
-        async public Task<string> GetBoardPatternAsJSON()
-        {
-            string boardViewString = await Task<string>.Factory.StartNew(() => board.GetBoardPatternAsJSON());
-            return boardViewString;
-        }
 
-        async public Task<string> GetSelectionsAndHighlightsAsJSON()
-        {
-            string boardSelectionString = await Task<string>.Factory.StartNew(() => board.GetSelectionsAndHighlightsAsJSON());
-            return boardSelectionString;
-        }
-        
-        public string GetPlayStateAsJson()
-        {
-            GameStateTransferObject state = new GameStateTransferObject() { attackerIsAI = this.attackerIsAI, defenderIsAI = this.defenderIsAI, turnState = this.currentTurnState };
-            string json = JsonConvert.SerializeObject(state);
-            return json;
-        }
 
         public string SquareClickResponse(int column, int row)
         {

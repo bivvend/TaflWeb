@@ -15,13 +15,7 @@ namespace TaflWeb.Models
 
         BoardModel board { get; set; }
 
-        Task<string> GetBoardAsJson(); //returns functional description as JSON
-
-        Task<string> GetBoardPatternAsJSON();  //returns the initial randomised view for visual interest.
-
-        Task<string> GetSelectionsAndHighlightsAsJSON(); //returns the current selections as Json
-
-        string GetPlayStateAsJson(); //Returns the current status of the game (who's turn etc)
+        string GetBoardAsJson();
 
         string SquareClickResponse(int column, int row); // Return infomation to client regarding result of click (getting far too server side here!)
 
@@ -34,8 +28,6 @@ namespace TaflWeb.Models
         List<Move> moveHistory { get; set; }
 
         string GetString();
-
-        void SetString(string value);
 
         Task<Move> RunAITurn(SimpleBoard startBoard);
 
