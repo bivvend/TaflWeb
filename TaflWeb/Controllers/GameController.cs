@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TaflWeb.Model.Classes;
 using TaflWeb.Models;
 
@@ -43,10 +44,18 @@ namespace TaflWeb.Controllers
 
         [HttpPost]
         [Route("api/[controller]/SquareClick")]
-        public async Task<string> SquareClick(int column, int row)
+        public async Task<string> SquareClick(int column, int row, string boardDataAsJson)
         {
-            string responseJSon = await Task<string>.Factory.StartNew(() => game.SquareClickResponse(column, row));
-            return responseJSon;
+            try
+            {
+                game = JsonConvert.DeserializeObject<Game>(boardDataAsJson);
+                string responseJSon = await Task<string>.Factory.StartNew(() => game.SquareClickResponse(column, row));
+                return responseJSon;
+            }
+            catch(Exception ex)
+            {
+                return "FAILED";
+            }
         }
     }
 

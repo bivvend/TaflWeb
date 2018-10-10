@@ -40,5 +40,18 @@ namespace TaflWeb.Models.Classes
                 _requestReDraw = value;
             }
         }
+
+        private string _boardAsJson;
+        public string boardAsJson
+        {
+            get
+            {
+                return _boardAsJson;
+            }
+            set
+            {
+                _boardAsJson = value;
+            }
+        }
     }
 }

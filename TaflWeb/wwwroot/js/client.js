@@ -41,21 +41,22 @@
         var i = 0;
         if (blockSizeX != undefined && blockSizeY != undefined && blockSizeX > 0 && blockSizeY > 0) {
 
-            var column = Math.floor(x / blockSizeX);
-            var row = Math.floor(y / blockSizeY);
-            $("#clickColumn").text("Column: " + column);
-            $("#clickRow").text("Row: " + row);
+            var columnToSend = Math.floor(x / blockSizeX);
+            var rowToSend = Math.floor(y / blockSizeY);
+            $("#clickColumn").text("Column: " + columnToSend);
+            $("#clickRow").text("Row: " + rowToSend);
 
             //request response from server regarding result of this click
-
+            var objectToSend = JSON.stringify(boardData);
             $.ajax({
                 type: "POST",
                 url: "/api/Game/SquareClick",
-                data: { column, row },
+                data: { column: columnToSend, row: rowToSend, boardDataAsJson: objectToSend },
+                dataType: 'json',
                 success: function (response) {
                     var respObj = JSON.parse(response);
                     //SHOULD CONTAIN RESPONSE + THE NEW BOARD AFTER CLICKING
-
+                    boardData = JSON.parse(respObj.boardAsJson);
                     //$("#lastResponse").text("Last response: " + respObj.responseText);
                     console.log(respObj.responseText);
                     if (respObj.requestReDraw) {
@@ -173,10 +174,6 @@
                         pieceDrawArray.push([srcPiece, i, j]);
                     }
 
-                    console.log("S");
-                    console.log(typeof selected);
-                    console.log("H");
-                    console.log(typeof highlighted);
 
                     tileDrawArray.push([src, i, j, highlighted, selected]);   //Create array of images to draw                    
                   

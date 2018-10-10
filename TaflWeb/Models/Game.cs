@@ -136,8 +136,10 @@ namespace TaflWeb.Models
 
         public string SquareClickResponse(int column, int row)
         {
+
             Square clickedSquare = board.GetSquare(row, column);
-            ClickResponseTransferObject responseObj = new ClickResponseTransferObject() { responseText = ClickResponseTransferObject.NO_PIECE_FOUND, requestReDraw = false };
+
+            ClickResponseTransferObject responseObj = new ClickResponseTransferObject() { responseText = ClickResponseTransferObject.NO_PIECE_FOUND, requestReDraw = false, boardAsJson = null };
             if(clickedSquare != null)
             {
                 //Check to see if square is occupied
@@ -153,6 +155,7 @@ namespace TaflWeb.Models
                 {
                     ApplySelection(clickedSquare);
                     responseObj.responseText = ClickResponseTransferObject.PIECE_FOUND_SELECTING;
+                    responseObj.boardAsJson = JsonConvert.SerializeObject(this);
                     responseObj.requestReDraw = true;
                     return JsonConvert.SerializeObject(responseObj);
 
@@ -163,6 +166,7 @@ namespace TaflWeb.Models
                     ApplySelection(clickedSquare);
                     responseObj.requestReDraw = true;
                     responseObj.responseText = ClickResponseTransferObject.PIECE_FOUND_SELECTING;
+                    responseObj.boardAsJson = JsonConvert.SerializeObject(this);
                     return JsonConvert.SerializeObject(responseObj);
                 }
                 //clicked empty square
@@ -176,6 +180,7 @@ namespace TaflWeb.Models
                             AdvanceTurn();
                             responseObj.requestReDraw = true;
                             responseObj.responseText = ClickResponseTransferObject.VALID_MOVE_FOUND_EXECUTING;
+                            responseObj.boardAsJson = JsonConvert.SerializeObject(this);
                             return JsonConvert.SerializeObject(responseObj);
                         }
                         if (currentTurnState == TurnState.Defender && !defenderIsAI)
@@ -184,6 +189,7 @@ namespace TaflWeb.Models
                             AdvanceTurn();
                             responseObj.requestReDraw = true;
                             responseObj.responseText = ClickResponseTransferObject.VALID_MOVE_FOUND_EXECUTING;
+                            responseObj.boardAsJson = JsonConvert.SerializeObject(this);
                             return JsonConvert.SerializeObject(responseObj);
                         }
                     }

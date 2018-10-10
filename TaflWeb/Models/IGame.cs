@@ -17,7 +17,7 @@ namespace TaflWeb.Models
 
         string GetBoardAsJson();
 
-        string SquareClickResponse(int column, int row); // Return infomation to client regarding result of click (getting far too server side here!)
+        string SquareClickResponse(int column, int row); // Return infomation to client regarding result of click.
 
         TurnState currentTurnState { get; set; }
 
