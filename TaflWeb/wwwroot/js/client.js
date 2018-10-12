@@ -54,15 +54,8 @@
                 data: { column: columnToSend, row: rowToSend, boardDataAsJson: objectToSend },
                 dataType: 'json',
                 success: function (response) {
-                    var respObj = JSON.parse(response);
-                    //SHOULD CONTAIN RESPONSE + THE NEW BOARD AFTER CLICKING
-                    boardData = JSON.parse(respObj.boardAsJson);
-                    //$("#lastResponse").text("Last response: " + respObj.responseText);
-                    console.log(respObj.responseText);
-                    if (respObj.requestReDraw) {
-
-                        draw();
-                    }
+                    boardData = response;
+                    draw();
 
                 },
                 failure: function (response) {

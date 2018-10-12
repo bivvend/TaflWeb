@@ -154,20 +154,17 @@ namespace TaflWeb.Models
                 if(clickedSquare.AttackerPresent && currentTurnState == TurnState.Attacker && !attackerIsAI)
                 {
                     ApplySelection(clickedSquare);
-                    responseObj.responseText = ClickResponseTransferObject.PIECE_FOUND_SELECTING;
-                    responseObj.boardAsJson = JsonConvert.SerializeObject(this);
-                    responseObj.requestReDraw = true;
-                    return JsonConvert.SerializeObject(responseObj);
+
+
+                    return JsonConvert.SerializeObject(this);
 
                 }
                 //clicked defender and defender not ai
                 if ((clickedSquare.DefenderPresent || clickedSquare.KingPresent) && currentTurnState == TurnState.Defender && !defenderIsAI)
                 {
                     ApplySelection(clickedSquare);
-                    responseObj.requestReDraw = true;
-                    responseObj.responseText = ClickResponseTransferObject.PIECE_FOUND_SELECTING;
-                    responseObj.boardAsJson = JsonConvert.SerializeObject(this);
-                    return JsonConvert.SerializeObject(responseObj);
+
+                    return JsonConvert.SerializeObject(this);
                 }
                 //clicked empty square
                 if (selectedSquare != null  && clickedSquare.Highlighted)
