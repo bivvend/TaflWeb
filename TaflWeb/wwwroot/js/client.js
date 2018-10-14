@@ -13,18 +13,28 @@
         boardClick(mouseX, mouseY);
     });
 
+    $("#checkBoxAttackerIsAI").change(function () {
+        if (boardData.currentTurnState == 0) {
+            //Requested AI to take over attacker move
+            var i = 0;
+        }
+    });
+
+    $("#checkBoxDefenderIsAI").change(function () {
+        if (boardData.currentTurnState == 1) {
+            //Requested AI to take over defender move
+            var i = 0;
+        }
+    });
+
     function getBoardData() {
         $.ajax({
             url: "/api/Game/GetBoard", success: function (result) {
+                boardData = [];
                 boardData = JSON.parse(result);
-
-                //playState = JSON.parse(result);
-                //$("#attackerIsAI").text("Attacker is AI: " + playState.attackerIsAI);
-                //$("#defenderIsAI").text("Defender is AI: " + playState.defenderIsAI);
-                //$("#turnStatus").text("Turn State: " + playState.turnState);
+                showTurnState();
                 NUMBER_OF_COLUMNS = boardData.board.SizeX;
                 NUMBER_OF_ROWS = boardData.board.SizeY;
-                //getSquare(0, 0);
                 draw();
             }
         }); 
@@ -37,6 +47,17 @@
 
     }
 
+    function showTurnState() {
+        $("#turnStatus").text("Turn State: " + boardData.currentTurnState);
+        if (boardData.attackerIsAI) {
+            $("#checkBoxAttackerIsAI").prop('checked', true);
+        }
+        if (boardData.defenderIsAI) {
+            $("#checkBoxDefenderIsAI").prop('checked', true);
+        }
+
+    }
+
     function boardClick(x, y) {
         var i = 0;
         if (blockSizeX != undefined && blockSizeY != undefined && blockSizeX > 0 && blockSizeY > 0) {
@@ -45,6 +66,19 @@
             var rowToSend = Math.floor(y / blockSizeY);
             $("#clickColumn").text("Column: " + columnToSend);
             $("#clickRow").text("Row: " + rowToSend);
+
+            if ($("#checkBoxAttackerIsAI").is(':checked')) {
+                boardData.attackerIsAI = true;
+            }
+            else{
+                boardData.attackerIsAI = false;
+            }
+            if ($("#checkBoxDefenderIsAI").is(':checked')) {
+                boardData.defenderIsAI = true;
+            }
+            else {
+                boardData.defenderIsAI = false;
+            }
 
             //request response from server regarding result of this click
             var objectToSend = JSON.stringify(boardData);
@@ -55,8 +89,11 @@
                 dataType: 'json',
                 success: function (response) {
                     boardData = response;
-                    draw();
-
+                    if (boardData.requestReDraw) {
+                        draw();
+                    }
+                    $("#responseLabel").text("Response:" + boardData.responseText);
+                    showTurnState();
                 },
                 failure: function (response) {
                     alert(response.responseText);

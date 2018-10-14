@@ -20,7 +20,7 @@ namespace TaflWeb.Controllers
         public GameController(IGame gameIn)
         {
             game = gameIn;
-
+            
         }
 
         [HttpGet]
@@ -37,6 +37,7 @@ namespace TaflWeb.Controllers
         [Route("api/[controller]/GetBoard")]
         public async Task<string> GetBoard()
         {
+            game.board.CreateBoard();
             string boardAsJson = await Task<string>.Run(() => game.GetBoardAsJson());
             return boardAsJson;
         }
@@ -48,7 +49,8 @@ namespace TaflWeb.Controllers
         {
             try
             {
-                game = JsonConvert.DeserializeObject<Game>(boardDataAsJson);
+                game = JsonConvert.DeserializeObject<Game>(boardDataAsJson);         
+               
                 string responseJSon = await Task<string>.Factory.StartNew(() => game.SquareClickResponse(column, row));
                 return responseJSon;
             }
@@ -57,6 +59,8 @@ namespace TaflWeb.Controllers
                 return "FAILED";
             }
         }
+
+
     }
 
 
