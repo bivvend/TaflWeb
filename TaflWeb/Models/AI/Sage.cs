@@ -43,57 +43,7 @@ namespace TaflWeb.Model.AI
             longTermBestList = new List<Move>();
         }
 
-        public void ProcessMoves(List<List<Move>> input, TurnState turnState, bool lowMem = true)
-        {
-            this.inputMoveList = input;
-            this.currentTurnState = turnState;
-
-            bestList = new List<Move>();
-
-
-            //Ask general to process moves
-            if (lowMem)
-            {
-                bestList.AddRange(general.EvaluateLowMem(inputMoveList, turnState));
-                longTermBestList.AddRange(general.EvaluateLowMem(inputMoveList, turnState));
-            }
-            else
-            {
-
-            }
-
-            if (turnState == TurnState.Attacker)
-            {
-                bestList.AddRange(assassin.Evaluate(inputMoveList, turnState));
-
-                longTermBestList.AddRange(assassin.Evaluate(inputMoveList, turnState));
-            }
-
-            if (turnState == TurnState.Defender)
-            {
-                bestList.AddRange(kingsCouncil.Evaluate(inputMoveList, turnState));
-                longTermBestList.AddRange(kingsCouncil.Evaluate(inputMoveList, turnState));
-            }
-
-            bestList.ForEach((item) =>
-            {
-
-                item.scoreSage = item.scoreGeneral * weightGeneral + item.scoreKingsCouncil * weightKingsCouncil + item.scoreAssassin * weightAssassin;
-
-            });
-
-            longTermBestList.ForEach((item) =>
-            {
-
-                item.scoreSage = item.scoreGeneral * weightGeneral + item.scoreKingsCouncil * weightKingsCouncil + item.scoreAssassin * weightAssassin;
-
-            });
-
-            //pick best to return
-            suggestedMove = bestList.MaxObject((item) => item.scoreSage);
-            //longTermSuggestedMove = bestList.MaxObject((item) => item.scoreSage);
-        }
-
+        
         public void ProcessMovesLowerMem(List<List<Move>> input, TurnState turnState)
         {
             try

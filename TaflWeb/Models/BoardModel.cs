@@ -52,8 +52,7 @@ namespace TaflWeb.Models
         {
             board = new List<Square>();
             SizeX = sizeXIn;
-            SizeY = sizeYIn;
-            CreateBoard();
+            SizeY = sizeYIn;            
         }
 
         public bool CheckForAttackerVictory()
@@ -245,55 +244,8 @@ namespace TaflWeb.Models
             return simpleBoard;
         }
 
-        public string GetSimpleBoardAsJSON()
-        {
 
-            SimpleBoard simpleBoard = new SimpleBoard();
-            simpleBoard.SquareTypeArray = new Square.square_type[SizeX, SizeY];
-            simpleBoard.OccupationArray = new Square.occupation_type[SizeX, SizeY];
 
-            board.ToList().ForEach((item) =>
-            {
-                simpleBoard.SquareTypeArray[item.Column, item.Row] = item.SquareType;
-                simpleBoard.OccupationArray[item.Column, item.Row] = item.Occupation;
-            });
-
-            return JsonConvert.SerializeObject(simpleBoard);
-        }
-        /// <summary>
-        /// Returns the board tiles types as a JSON- used to vary the visual design a bit
-        /// </summary>
-        /// <returns></returns>
-        public string GetBoardPatternAsJSON()
-        {
-            Square.bare_tile_type[,] typeArray = new Square.bare_tile_type[SizeX, SizeY];
-
-            board.ToList().ForEach((item) =>
-            {
-                typeArray[item.Column, item.Row] = item.BareTileType;
-            });
-
-            return JsonConvert.SerializeObject(typeArray);
-        }
-
-        
-
-        public string GetSelectionsAndHighlightsAsJSON()
-        {
-            SelectionTransferObject[,] selectionHighlightArray = new SelectionTransferObject[SizeX, SizeY];
-
-            board.ToList().ForEach((item) =>
-            {
-                selectionHighlightArray[item.Column, item.Row] = new SelectionTransferObject() { selected = item.Selected, highlighted = item.Highlighted };                
-            });
-
-            ///DEBUG TEST
-            ///
-            //selectionHighlightArray[2,1] = new SelectionTransferObject(){ selected = false, highlighted = true};
-
-            return JsonConvert.SerializeObject(selectionHighlightArray);
-
-        }
 
         public Square GetSquare(int Row, int Column)
         {

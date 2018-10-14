@@ -12,9 +12,46 @@ namespace TaflWeb.Models
 {
     public class Game : IGame
     {
-        private string test { get; set; }
 
+        private string _responseText;
+        public string responseText
+        {
+            get
+            {
+                return _responseText;
+            }
+            set
+            {
+                _responseText = value;
+            }
+        }
+
+        [JsonIgnore]
+        private string NOT_A_VALID_SQUARE = "NOT_A_VALID_SQUARE";
+        [JsonIgnore]
+        private string NO_PIECE_FOUND = "NO_PIECE_FOUND";
+        [JsonIgnore]
+        private string PIECE_FOUND_SELECTING = "PIECE_FOUND_SELECTING";
+        [JsonIgnore]
+        private string VALID_MOVE_FOUND_EXECUTING = "VALID_MOVE_FOUND_EXECUTING";
+
+        private bool _requestReDraw;
+        public bool requestReDraw
+        {
+            get
+            {
+                return _requestReDraw;
+            }
+            set
+            {
+                _requestReDraw = value;
+            }
+        }
+
+
+        [JsonIgnore]
         private Sage _sage;
+        [JsonIgnore]
         public Sage sage   //Sage evalutes the move tree
         {
             get
@@ -28,7 +65,7 @@ namespace TaflWeb.Models
         }
 
         private BoardModel _board;
-        public BoardModel board
+        public BoardModel board 
         {
             get
             {
@@ -112,17 +149,19 @@ namespace TaflWeb.Models
    
         public Game()
         {
-            test = "Hello from API.";
+            
             board = new BoardModel(11, 11);
-        }
-        public void SetString(string value)
-        {
-            test = value;
         }
 
         public string GetString()
         {
-            return test;
+            return "TaflWeb";
+        }
+
+        public string GetBoardAsJson()
+        {
+            string response = JsonConvert.SerializeObject(this);
+            return response;
         }
 
         async public Task<Move> RunAITurn(SimpleBoard startBoard)
@@ -131,68 +170,53 @@ namespace TaflWeb.Models
             await Task.Delay(200);
             return move;
         }
-        /// <summary>
-        /// Returns the situation of the board (tile types and occupations)
-        /// </summary>
-        /// <returns></returns>
-        async public Task<string> GetBoardAsJson()
-        {
-            string boardString = await Task<string>.Factory.StartNew(()=>board.GetSimpleBoardAsJSON());
-            return boardString;
-        }
-        /// <summary>
-        /// Returns the image number within the set of similar images to give visual diversity to board
-        /// </summary>
-        /// <returns></returns>
-        async public Task<string> GetBoardPatternAsJSON()
-        {
-            string boardViewString = await Task<string>.Factory.StartNew(() => board.GetBoardPatternAsJSON());
-            return boardViewString;
-        }
 
-        async public Task<string> GetSelectionsAndHighlightsAsJSON()
+        private Square GetSelectedSquare()
         {
-            string boardSelectionString = await Task<string>.Factory.StartNew(() => board.GetSelectionsAndHighlightsAsJSON());
-            return boardSelectionString;
-        }
-        
-        public string GetPlayStateAsJson()
-        {
-            GameStateTransferObject state = new GameStateTransferObject() { attackerIsAI = this.attackerIsAI, defenderIsAI = this.defenderIsAI, turnState = this.currentTurnState };
-            string json = JsonConvert.SerializeObject(state);
-            return json;
+            List<Square> foundSquares = board.board.Where(item => item.Selected == true).ToList();
+            if(foundSquares.Count < 1)
+            {
+                return null;
+            }
+            else
+            {
+                return foundSquares[0];
+            }
+
         }
 
         public string SquareClickResponse(int column, int row)
         {
+
             Square clickedSquare = board.GetSquare(row, column);
-            ClickResponseTransferObject responseObj = new ClickResponseTransferObject() { responseText = ClickResponseTransferObject.NO_PIECE_FOUND, requestReDraw = false };
-            if(clickedSquare != null)
+            selectedSquare = GetSelectedSquare();
+
+            if (clickedSquare != null)
             {
                 //Check to see if square is occupied
                 //Game already won
                 if(currentTurnState == TurnState.VictoryAttacker || currentTurnState == TurnState.VictoryDefender)
                 {
-                    responseObj.requestReDraw = false;
-                    responseObj.responseText = ClickResponseTransferObject.NOT_A_VALID_SQUARE;
-                    return JsonConvert.SerializeObject(responseObj);
+                    this.requestReDraw = false;
+                    this.responseText = NOT_A_VALID_SQUARE;
+                    return JsonConvert.SerializeObject(this);
                 }
                 //Clicked attacker and attacker is not ai 
                 if(clickedSquare.AttackerPresent && currentTurnState == TurnState.Attacker && !attackerIsAI)
                 {
                     ApplySelection(clickedSquare);
-                    responseObj.responseText = ClickResponseTransferObject.PIECE_FOUND_SELECTING;
-                    responseObj.requestReDraw = true;
-                    return JsonConvert.SerializeObject(responseObj);
+                    this.requestReDraw = true;
+                    this.responseText  = "PIECE_FOUND_SELECTING";
+                    return JsonConvert.SerializeObject(this);
 
                 }
                 //clicked defender and defender not ai
                 if ((clickedSquare.DefenderPresent || clickedSquare.KingPresent) && currentTurnState == TurnState.Defender && !defenderIsAI)
                 {
                     ApplySelection(clickedSquare);
-                    responseObj.requestReDraw = true;
-                    responseObj.responseText = ClickResponseTransferObject.PIECE_FOUND_SELECTING;
-                    return JsonConvert.SerializeObject(responseObj);
+                    this.requestReDraw = true;
+                    this.responseText = "PIECE_FOUND_SELECTING";
+                    return JsonConvert.SerializeObject(this);
                 }
                 //clicked empty square
                 if (selectedSquare != null  && clickedSquare.Highlighted)
@@ -203,34 +227,35 @@ namespace TaflWeb.Models
                         {
                             board.MovePiece(selectedSquare.Row, selectedSquare.Column, clickedSquare.Row, clickedSquare.Column);
                             AdvanceTurn();
-                            responseObj.requestReDraw = true;
-                            responseObj.responseText = ClickResponseTransferObject.VALID_MOVE_FOUND_EXECUTING;
-                            return JsonConvert.SerializeObject(responseObj);
+                            this.requestReDraw = true;
+                            this.responseText = VALID_MOVE_FOUND_EXECUTING;
+                            return JsonConvert.SerializeObject(this);
                         }
                         if (currentTurnState == TurnState.Defender && !defenderIsAI)
                         {
                             board.MovePiece(selectedSquare.Row, selectedSquare.Column, clickedSquare.Row, clickedSquare.Column);
                             AdvanceTurn();
-                            responseObj.requestReDraw = true;
-                            responseObj.responseText = ClickResponseTransferObject.VALID_MOVE_FOUND_EXECUTING;
-                            return JsonConvert.SerializeObject(responseObj);
+                            this.requestReDraw = true;
+                            this.responseText = VALID_MOVE_FOUND_EXECUTING;
+                            return JsonConvert.SerializeObject(this);
                         }
                     }
                 }
             }
             else
             {
-                responseObj.requestReDraw = false;
-                responseObj.responseText= ClickResponseTransferObject.NOT_A_VALID_SQUARE;
-                return  JsonConvert.SerializeObject(responseObj);
+                this.requestReDraw = false;
+                this.responseText= NOT_A_VALID_SQUARE;
+                return  JsonConvert.SerializeObject(this);
             }
 
-            
-            return JsonConvert.SerializeObject(responseObj); //  catch
+            this.requestReDraw = false;
+            this.responseText = NOT_A_VALID_SQUARE;
+            return JsonConvert.SerializeObject(this); //  catch
 
         }
 
-        private void AdvanceTurn()
+        private async void AdvanceTurn()
         {
             //See if anyone has won
 
@@ -254,7 +279,17 @@ namespace TaflWeb.Models
 
             if(currentTurnState == TurnState.Attacker)
             {
-                newState = TurnState.Defender;
+
+                if (defenderIsAI)
+                {
+                    newState = TurnState.Attacker;
+                    Move AIMove = await RunAITurn(board.GetSimpleBoard());
+                }
+                else
+                {
+                    newState = TurnState.Defender;
+                }
+
             }
             if(currentTurnState == TurnState.Defender)
             {
@@ -262,9 +297,7 @@ namespace TaflWeb.Models
             }
 
             currentTurnState = newState;
-            ClearSelections();
-
-            
+            ClearSelections();           
             
         }
 
