@@ -21,15 +21,20 @@ namespace TaflWeb.Models
 
         TurnState currentTurnState { get; set; }
 
+        Task<string> RunAI(int turnState); ///runs the AI and returns a board state
+
         bool attackerIsAI { get; set; }
 
         bool defenderIsAI { get; set; }
+
+        bool requestReDraw { get; set; }
+
+        string responseText { get; set; }
 
         List<Move> moveHistory { get; set; }
 
         string GetString();
 
-        Task<Move> RunAITurn(SimpleBoard startBoard);
 
     }
 

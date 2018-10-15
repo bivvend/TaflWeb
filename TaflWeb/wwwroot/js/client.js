@@ -13,19 +13,67 @@
         boardClick(mouseX, mouseY);
     });
 
+    $("#resetButton").click(function (e) {
+        getBoardData();
+    });
+
     $("#checkBoxAttackerIsAI").change(function () {
-        if (boardData.currentTurnState == 0) {
-            //Requested AI to take over attacker move
-            var i = 0;
+        if ($("#checkBoxAttackerIsAI").is(':checked')) {
+            boardData.attackerIsAI = true;
+        }
+        else {
+            boardData.attackerIsAI = false;
+        }
+
+        if (boardData.currentTurnState == 0 && boardData.attackerIsAI) {
+            runAI();
         }
     });
 
+
     $("#checkBoxDefenderIsAI").change(function () {
-        if (boardData.currentTurnState == 1) {
-            //Requested AI to take over defender move
-            var i = 0;
+        if ($("#checkBoxDefenderIsAI").is(':checked')) {
+            boardData.defenderIsAI = true;
+        }
+        else {
+            boardData.defenderIsAI = false;
+        }
+        if (boardData.currentTurnState == 1 && boardData.defenderIsAI) {
+            runAI();
         }
     });
+
+    function runAI() {
+        var objectToSend = JSON.stringify(boardData);
+        $.ajax({
+            type: "POST",
+            url: "/api/Game/RunAI",
+            data: { turnState: boardData.turnState, boardDataAsJson: objectToSend },
+            dataType: 'json',
+            success: function (response) {
+                boardData = response;
+                if (boardData.requestReDraw) {
+                    draw();
+                }
+                $("#responseLabel").text("Response:" + boardData.responseText);
+                showTurnState();
+
+                if (boardData.currentTurnState == 0 && boardData.attackerIsAI) {
+                    runAI();
+                }
+                if (boardData.currentTurnState == 1 && boardData.defenderIsAI) {
+                    runAI();
+                }
+                
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
 
     function getBoardData() {
         $.ajax({
@@ -94,6 +142,13 @@
                     }
                     $("#responseLabel").text("Response:" + boardData.responseText);
                     showTurnState();
+
+                    if (boardData.currentTurnState == 0 && boardData.attackerIsAI) {
+                        runAI();
+                    }
+                    if (boardData.currentTurnState == 1 && boardData.defenderIsAI) {
+                        runAI();
+                    }
                 },
                 failure: function (response) {
                     alert(response.responseText);

@@ -60,6 +60,23 @@ namespace TaflWeb.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("api/[controller]/RunAI")]
+        public async Task<string> RunAI(int turnState, string boardDataAsJson)
+        {
+            try
+            {
+                game = JsonConvert.DeserializeObject<Game>(boardDataAsJson);
+
+                string responseJSon = await game.RunAI(turnState);
+                return responseJSon;
+            }
+            catch (Exception ex)
+            {
+                return "FAILED";
+            }
+        }
+
 
     }
 

@@ -34,6 +34,9 @@ namespace TaflWeb.Models
         private string PIECE_FOUND_SELECTING = "PIECE_FOUND_SELECTING";
         [JsonIgnore]
         private string VALID_MOVE_FOUND_EXECUTING = "VALID_MOVE_FOUND_EXECUTING";
+        [JsonIgnore]
+        private string AI_MOVE_COMPLETED = "AI_MOVE_COMPLETED";
+
 
         private bool _requestReDraw;
         public bool requestReDraw
@@ -151,6 +154,7 @@ namespace TaflWeb.Models
         {
             
             board = new BoardModel(11, 11);
+            moveHistory = new List<Move>();
         }
 
         public string GetString()
@@ -164,11 +168,187 @@ namespace TaflWeb.Models
             return response;
         }
 
-        async public Task<Move> RunAITurn(SimpleBoard startBoard)
+        public async Task<string> RunAI(int turnState)
         {
-            Move move = new Move();
-            await Task.Delay(200);
-            return move;
+            string response = "";
+            sage = new Sage();
+            SimpleBoard boardToRun = board.GetSimpleBoard();
+            Move moveToMake = await Task<Move>.Factory.StartNew(() => RunAITurn(boardToRun));
+            ApplyAIMove(moveToMake);
+            moveHistory.Add(moveToMake);
+            requestReDraw = true;
+            responseText = 
+            response = JsonConvert.SerializeObject(this);
+            return response;
+        }
+
+        private void ApplyAIMove (Move aMove)
+        {
+            //Overlay the simple board onto the real board
+            int SizeX = aMove.board.OccupationArray.GetLength(0);
+            int SizeY = aMove.board.OccupationArray.GetLength(1);
+            Square aSquare = new Square();
+            for (int i = 0; i < SizeY; i++) //Rows
+            {
+                for (int j = 0; j < SizeX; j++) //Columns
+                {
+                    aSquare = GetSquare(i, j);
+                    if (aSquare != null)
+                    {
+                        aSquare.Occupation = aMove.board.OccupationArray[j, i];
+                    }
+                }
+            }
+
+            if (currentTurnState == TurnState.Attacker)
+            {
+                if (board.CheckForAttackerVictory())
+                {
+                    currentTurnState = TurnState.VictoryAttacker;
+                }
+            }
+
+            if (currentTurnState == TurnState.Defender)
+            {
+                if (board.CheckForDefenderVictory())
+                {
+                    currentTurnState = TurnState.VictoryDefender;
+                }
+
+            }
+
+            if (currentTurnState == TurnState.Defender)
+            {
+                currentTurnState = TurnState.Attacker;
+            }
+            else if (currentTurnState == TurnState.Attacker)
+            {
+
+                currentTurnState = TurnState.Defender;
+            }
+        }
+
+
+        private Move RunAITurn(SimpleBoard startBoard)
+        {
+            SimpleBoard BaseBoard = startBoard;
+
+            List<Move> moveList_0 = new List<Move>();
+            DateTime start = DateTime.Now;
+            sage.bestList = new List<Move>();
+            sage.longTermBestList = new List<Move>();
+
+            //Fill list with all possible moves of depth 0
+
+            moveList_0 = BaseBoard.GetPossibleMoves(this.currentTurnState, null, 0);
+
+            Object _lock = new object();
+
+            //Create Depth 1 moves
+            Parallel.ForEach(moveList_0, (m) =>
+            {
+                //Make the moves
+                m.MakeMove(m, BaseBoard);
+
+                //Look at all the depth 1 moves for the opposing side
+
+                List<Move> moveList_1 = new List<Move>();
+                List<Move> moveList_2 = new List<Move>();
+
+                if (currentTurnState == TurnState.Defender)
+                {
+
+                    moveList_1 = m.board.GetPossibleMoves(TurnState.Attacker, m, 1);
+                }
+                if (currentTurnState == TurnState.Attacker)
+                {
+                    moveList_1 = m.board.GetPossibleMoves(TurnState.Defender, m, 1);
+
+                }
+
+                moveList_1.ForEach((m2) =>
+                {
+                    m2.MakeMove(m2, m2.parent.board);
+                });
+
+                moveList_1.ForEach((m2) =>
+                {
+                    //Look at all the depth 1 moves for the initial side                    
+
+                    if (currentTurnState == TurnState.Defender)
+                    {
+                        moveList_2 = m2.board.GetPossibleMoves(TurnState.Defender, m2, 2);
+                    }
+                    if (currentTurnState == TurnState.Attacker)
+                    {
+                        moveList_2 = m2.board.GetPossibleMoves(TurnState.Attacker, m2, 2);
+
+                    }
+
+                    moveList_2.ForEach((m3) =>
+                    {
+                        //Make the moves
+                        m3.MakeMove(m3, m3.parent.board);
+                    });
+
+
+                    //build List<List<Move>>
+                    List<List<Move>> moveList = new List<List<Move>>();
+                    moveList.Add(new List<Move>());
+                    moveList[0].Add(m);
+                    moveList.Add(moveList_1);
+                    moveList.Add(moveList_2);
+
+                    //Propagate scores
+                    for (int i = moveList.Count - 1; i >= 0; i--)
+                    {
+
+                        //Push all the data to the depth 0 moves
+                        moveList[i].ForEach((item) =>
+                        {
+                            if (i != 0)
+                            {
+                                //Total number of takes in the pipeline downwards
+                                if (item.numberTakesAttacker > 0 || item.numberTakesDefender > 0)
+                                {
+                                    if (i == 1)
+                                    {
+                                        item.parent.numberTakesAttackerAtDepth[i] += item.numberTakesAttacker;
+                                        item.parent.numberTakesDefenderAtDepth[i] += item.numberTakesDefender;
+                                    }
+                                    if (i == 2)
+                                    {
+                                        item.parent.parent.numberTakesAttackerAtDepth[i] += item.numberTakesAttacker;
+                                        item.parent.parent.numberTakesDefenderAtDepth[i] += item.numberTakesDefender;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                item.numberTakesAttackerAtDepth[0] = item.numberTakesAttacker;
+                                item.numberTakesDefenderAtDepth[0] = item.numberTakesDefender;
+                            }
+
+
+                        });
+
+                    }
+
+                    sage.ProcessMovesLowerMem(moveList, currentTurnState);
+
+
+                });
+
+            });
+
+            TimeSpan depth2duration = (DateTime.Now - start);
+            double runtimetodepth2 = depth2duration.TotalSeconds;
+
+            TimeSpan duration = (DateTime.Now - start);
+            double runtime = duration.TotalSeconds;
+            Move bestMove = sage.PickBestLowerMem();
+            bestMove.runTime = runtime;
+            return bestMove;
         }
 
         private Square GetSelectedSquare()
@@ -226,6 +406,8 @@ namespace TaflWeb.Models
                         if (currentTurnState == TurnState.Attacker && !attackerIsAI)
                         {
                             board.MovePiece(selectedSquare.Row, selectedSquare.Column, clickedSquare.Row, clickedSquare.Column);
+                            Move moveMade = new Move(selectedSquare.Row, selectedSquare.Column, clickedSquare.Row, clickedSquare.Column, null, 0);
+                            moveHistory.Add(moveMade);
                             AdvanceTurn();
                             this.requestReDraw = true;
                             this.responseText = VALID_MOVE_FOUND_EXECUTING;
@@ -234,6 +416,8 @@ namespace TaflWeb.Models
                         if (currentTurnState == TurnState.Defender && !defenderIsAI)
                         {
                             board.MovePiece(selectedSquare.Row, selectedSquare.Column, clickedSquare.Row, clickedSquare.Column);
+                            Move moveMade = new Move(selectedSquare.Row, selectedSquare.Column, clickedSquare.Row, clickedSquare.Column, null, 0);
+                            moveHistory.Add(moveMade);
                             AdvanceTurn();
                             this.requestReDraw = true;
                             this.responseText = VALID_MOVE_FOUND_EXECUTING;
@@ -280,15 +464,7 @@ namespace TaflWeb.Models
             if(currentTurnState == TurnState.Attacker)
             {
 
-                if (defenderIsAI)
-                {
-                    newState = TurnState.Attacker;
-                    Move AIMove = await RunAITurn(board.GetSimpleBoard());
-                }
-                else
-                {
-                    newState = TurnState.Defender;
-                }
+                newState = TurnState.Defender;
 
             }
             if(currentTurnState == TurnState.Defender)
