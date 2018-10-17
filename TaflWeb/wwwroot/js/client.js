@@ -5,6 +5,7 @@
     var NUMBER_OF_COLUMNS = 11;
     var blockSizeX = null;
     var blockSizeY = null;
+    var ajaxRequest = null;
 
     //Click needs to be registered to jQuery object not DOM object
     $("#boardImage").click(function (e) {
@@ -14,7 +15,8 @@
     });
 
     $("#resetButton").click(function (e) {
-        getBoardData();
+        ajaxRequest.abort();
+        getBoardData();        
     });
 
     $("#checkBoxAttackerIsAI").change(function () {
@@ -45,7 +47,7 @@
 
     function runAI() {
         var objectToSend = JSON.stringify(boardData);
-        $.ajax({
+        ajaxRequest = $.ajax({
             type: "POST",
             url: "/api/Game/RunAI",
             data: { turnState: boardData.turnState, boardDataAsJson: objectToSend },
@@ -56,8 +58,25 @@
                     draw();
                 }
                 $("#responseLabel").text("Response:" + boardData.responseText);
-                showTurnState();
 
+                //Need to check if both are AI and give user option to override
+                if (!boardData.attackerIsAI && !boardData.defenderIsAI) {
+                    showTurnState();
+                }
+                else {
+                    if ($("#checkBoxAttackerIsAI").is(':checked')) {
+                        boardData.attackerIsAI = true;
+                    }
+                    else {
+                        boardData.attackerIsAI = false;
+                    }
+                    if ($("#checkBoxDefenderIsAI").is(':checked')) {
+                        boardData.defenderIsAI = true;
+                    }
+                    else {
+                        boardData.defenderIsAI = false;
+                    }
+                }
                 if (boardData.currentTurnState == 0 && boardData.attackerIsAI) {
                     runAI();
                 }
@@ -67,10 +86,10 @@
                 
             },
             failure: function (response) {
-                alert(response.responseText);
+                console.log(response.responseText);
             },
             error: function (response) {
-                alert(response.responseText);
+                console.log(response.responseText);
             }
         });
     }
@@ -81,6 +100,10 @@
                 boardData = [];
                 boardData = JSON.parse(result);
                 showTurnState();
+                $("#checkBoxAttackerIsAI").prop('checked', false);
+                $("#checkBoxDefenderIsAI").prop('checked', false);
+                boardData.attackerIsAI = false;
+                boardData.defenderIsAI = false;
                 NUMBER_OF_COLUMNS = boardData.board.SizeX;
                 NUMBER_OF_ROWS = boardData.board.SizeY;
                 draw();
@@ -100,8 +123,14 @@
         if (boardData.attackerIsAI) {
             $("#checkBoxAttackerIsAI").prop('checked', true);
         }
+        else {
+            $("#checkBoxAttackerIsAI").prop('checked', false);
+        }
         if (boardData.defenderIsAI) {
             $("#checkBoxDefenderIsAI").prop('checked', true);
+        }
+        else {
+            $("#checkBoxAttackerIsAI").prop('checked', false);
         }
 
     }
@@ -151,10 +180,10 @@
                     }
                 },
                 failure: function (response) {
-                    alert(response.responseText);
+                    console.log(response.responseText);
                 },
                 error: function (response) {
-                    alert(response.responseText);
+                    console.log(response.responseText);
                 }
             });  
         }

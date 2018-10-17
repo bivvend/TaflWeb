@@ -177,7 +177,7 @@ namespace TaflWeb.Models
             ApplyAIMove(moveToMake);
             moveHistory.Add(moveToMake);
             requestReDraw = true;
-            responseText = 
+            responseText = AI_MOVE_COMPLETED;
             response = JsonConvert.SerializeObject(this);
             return response;
         }
