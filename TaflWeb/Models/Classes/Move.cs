@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace TaflWeb.Model.Classes
 {
@@ -28,6 +29,14 @@ namespace TaflWeb.Model.Classes
 
         public SimpleBoard board { get; set; }  //Board associated with the move.  Represents the state before and then after the move is made
 
+        private string[] columnMappringArray = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P" };
+        public List<string> columnMapping { get; set; }
+
+        private string[] rowMappringArray = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
+        public List<string> rowMapping { get; set; }
+
+        public string stringRespresentation { get; set; }
+
         public enum direction
         {
             FromBelow, FromAbove, FromLeft, FromRight
@@ -50,6 +59,11 @@ namespace TaflWeb.Model.Classes
 
             numberTakesAttackerAtDepth = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             numberTakesDefenderAtDepth = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+            columnMapping = new List<string>(columnMappringArray);  //init from array
+            rowMapping = new List<string>(rowMappringArray);  //init from array
+
+
         }
 
         public Move(int iStartColumn, int iStartRow, int iEndColumn, int iEndRow, Move parentMove, int iDepth)
@@ -69,12 +83,24 @@ namespace TaflWeb.Model.Classes
 
             numberTakesAttackerAtDepth = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             numberTakesDefenderAtDepth = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+            columnMapping = new List<string>(columnMappringArray);  //init from array
+            rowMapping = new List<string>(rowMappringArray);  //init from array
         }
+
 
 
         public override string ToString()
         {
-            return this.startColumn.ToString() + "," + this.startRow.ToString() + " To " + this.endColumn.ToString() + "," + this.endRow.ToString() + " (" + this.scoreSage.ToString("0.0000") + ")";
+            StringBuilder sb = new StringBuilder();
+            sb.Append(columnMapping[this.startColumn]);
+            sb.Append(rowMapping[this.startRow]);
+            sb.Append(" to ");
+            sb.Append(columnMapping[this.endColumn]);
+            sb.Append(rowMapping[this.endRow]);
+            this.stringRespresentation = sb.ToString();
+            return sb.ToString();
+
         }
 
         /// <summary>

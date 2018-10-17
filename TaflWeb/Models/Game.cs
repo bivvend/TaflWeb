@@ -175,6 +175,7 @@ namespace TaflWeb.Models
             SimpleBoard boardToRun = board.GetSimpleBoard();
             Move moveToMake = await Task<Move>.Factory.StartNew(() => RunAITurn(boardToRun));
             ApplyAIMove(moveToMake);
+            moveToMake.ToString();  // ensure string representation is upto date;
             moveHistory.Add(moveToMake);
             requestReDraw = true;
             responseText = AI_MOVE_COMPLETED;
@@ -202,6 +203,10 @@ namespace TaflWeb.Models
 
             if (currentTurnState == TurnState.Attacker)
             {
+                if(CheckForRepeatMoves(aMove))
+                {
+                    currentTurnState = TurnState.VictoryDefender;
+                }
                 if (board.CheckForAttackerVictory())
                 {
                     currentTurnState = TurnState.VictoryAttacker;
@@ -210,6 +215,10 @@ namespace TaflWeb.Models
 
             if (currentTurnState == TurnState.Defender)
             {
+                if (CheckForRepeatMoves(aMove))
+                {
+                    currentTurnState = TurnState.VictoryAttacker;
+                }
                 if (board.CheckForDefenderVictory())
                 {
                     currentTurnState = TurnState.VictoryDefender;
@@ -228,6 +237,26 @@ namespace TaflWeb.Models
             }
         }
 
+        private bool CheckForRepeatMoves(Move aMove)
+        {
+            bool isRepeat = false;
+            //Don't check if
+            //Current (not added yet) yours*//enemy 0 //yours-1 //enemy-2 //yours-3 *//enemy-4 //yours-5//enemy-6 //yours-7 *//enemy-8
+            //If current  -3  and -7 are the same
+            //and 
+            //enemy's  0  -4  and -8   are the same 
+            //Then the board position has repeated 3 times so it is a loss for the current player as was forced to make an illegal move.
+
+            //For list indicies 
+            //Current  with Count-4 and Count-8
+            //Count-1 with Count-5 and Count-9
+            if(moveHistory.Count > 8)   //Needs to be at least 9 moves in history.
+            {
+
+            }
+
+            return isRepeat;
+        }
 
         private Move RunAITurn(SimpleBoard startBoard)
         {
@@ -406,7 +435,8 @@ namespace TaflWeb.Models
                         if (currentTurnState == TurnState.Attacker && !attackerIsAI)
                         {
                             board.MovePiece(selectedSquare.Row, selectedSquare.Column, clickedSquare.Row, clickedSquare.Column);
-                            Move moveMade = new Move(selectedSquare.Row, selectedSquare.Column, clickedSquare.Row, clickedSquare.Column, null, 0);
+                            Move moveMade = new Move(selectedSquare.Column, selectedSquare.Row, clickedSquare.Column, clickedSquare.Row, null, 0);
+                            moveMade.ToString();  // ensure string representation is upto date;
                             moveHistory.Add(moveMade);
                             AdvanceTurn();
                             this.requestReDraw = true;
@@ -416,7 +446,8 @@ namespace TaflWeb.Models
                         if (currentTurnState == TurnState.Defender && !defenderIsAI)
                         {
                             board.MovePiece(selectedSquare.Row, selectedSquare.Column, clickedSquare.Row, clickedSquare.Column);
-                            Move moveMade = new Move(selectedSquare.Row, selectedSquare.Column, clickedSquare.Row, clickedSquare.Column, null, 0);
+                            Move moveMade = new Move(selectedSquare.Column, selectedSquare.Row, clickedSquare.Column, clickedSquare.Row, null, 0);
+                            moveMade.ToString();  // ensure string representation is upto date;
                             moveHistory.Add(moveMade);
                             AdvanceTurn();
                             this.requestReDraw = true;

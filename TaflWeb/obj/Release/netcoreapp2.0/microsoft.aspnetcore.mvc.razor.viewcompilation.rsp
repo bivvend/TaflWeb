@@ -1,8 +1,8 @@
-D:\Github\TaflWeb\TaflWeb
+C:\Github\TaflWeb\TaflWeb
 --output-path=obj\Release\netcoreapp2.0\
 --application-name=TaflWeb
---content-root=D:\Github\TaflWeb\TaflWeb
---file=D:\Github\TaflWeb\TaflWeb\Views\GameBoard\CurrentBoard.cshtml
---file=D:\Github\TaflWeb\TaflWeb\Views\Home\Index.cshtml
---file=D:\Github\TaflWeb\TaflWeb\Views\Shared\_Layout.cshtml
---file=D:\Github\TaflWeb\TaflWeb\Views\_ViewImports.cshtml
+--content-root=C:\Github\TaflWeb\TaflWeb
+--file=C:\Github\TaflWeb\TaflWeb\Views\GameBoard\CurrentBoard.cshtml
+--file=C:\Github\TaflWeb\TaflWeb\Views\Home\Index.cshtml
+--file=C:\Github\TaflWeb\TaflWeb\Views\Shared\_Layout.cshtml
+--file=C:\Github\TaflWeb\TaflWeb\Views\_ViewImports.cshtml
