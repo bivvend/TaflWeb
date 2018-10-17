@@ -54,6 +54,7 @@
             dataType: 'json',
             success: function (response) {
                 boardData = response;
+                updateMoveList();
                 if (boardData.requestReDraw) {
                     draw();
                 }
@@ -106,6 +107,7 @@
                 boardData.defenderIsAI = false;
                 NUMBER_OF_COLUMNS = boardData.board.SizeX;
                 NUMBER_OF_ROWS = boardData.board.SizeY;
+                updateMoveList();
                 draw();
             }
         }); 
@@ -133,6 +135,18 @@
             $("#checkBoxAttackerIsAI").prop('checked', false);
         }
 
+    }
+
+    function updateMoveList() {
+        var listFound  = $("#moveList").empty();
+        if (boardData.moveHistory != undefined) {
+            boardData.moveHistory.forEach(function (move) {
+                listFound.append($("<li>").text(move));
+            });
+        }
+        else {
+            boardData.moveList = [];
+        }
     }
 
     function boardClick(x, y) {
@@ -166,6 +180,7 @@
                 dataType: 'json',
                 success: function (response) {
                     boardData = response;
+                    updateMoveList();
                     if (boardData.requestReDraw) {
                         draw();
                     }
