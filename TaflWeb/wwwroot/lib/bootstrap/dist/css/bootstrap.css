@@ -67,6 +67,8 @@ body {
   color: #212529;
   text-align: left;
   background-color: #fff;
+  background-image: url("/Images/background.jpg");
+  background-size: cover;
 }
 
 [tabindex="-1"]:focus {
@@ -88,8 +90,6 @@ p {
   margin-top: 0;
   margin-bottom: 1rem;
 }
-
-abbr[title],
 abbr[data-original-title] {
   text-decoration: underline;
   -webkit-text-decoration: underline dotted;

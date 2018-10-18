@@ -63,3 +63,4 @@ C:\Github\TaflWeb\TaflWeb.Test\obj\Debug\netcoreapp2.0\TaflWeb.Test.AssemblyInfo
 C:\Github\TaflWeb\TaflWeb.Test\obj\Debug\netcoreapp2.0\TaflWeb.Test.csproj.CopyComplete
 C:\Github\TaflWeb\TaflWeb.Test\obj\Debug\netcoreapp2.0\TaflWeb.Test.dll
 C:\Github\TaflWeb\TaflWeb.Test\obj\Debug\netcoreapp2.0\TaflWeb.Test.pdb
+C:\Github\TaflWeb\TaflWeb.Test\bin\Debug\netcoreapp2.0\wwwroot\lib\bootstrap\dist\Images\background.jpg
