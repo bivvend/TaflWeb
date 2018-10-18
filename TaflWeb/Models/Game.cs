@@ -258,6 +258,26 @@ namespace TaflWeb.Models
             return isRepeat;
         }
 
+        private bool CompareMove(Move move1, Move move2)
+        {
+            bool areSame = false;
+            if (move1.startColumn == move2.startColumn)
+            {
+                if (move1.startRow == move2.startRow)
+                {
+                    if (move1.endColumn == move2.endColumn)
+                    {
+                        if (move1.endRow == move2.endRow)
+                        {
+                            areSame = true;
+                        }
+                    }
+                }
+            }                    
+
+            return areSame;
+        }
+
         private Move RunAITurn(SimpleBoard startBoard)
         {
             SimpleBoard BaseBoard = startBoard;
