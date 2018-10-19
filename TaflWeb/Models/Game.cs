@@ -252,7 +252,14 @@ namespace TaflWeb.Models
             //Count-1 with Count-5 and Count-9
             if(moveHistory.Count > 8)   //Needs to be at least 9 moves in history.
             {
-
+                int num = moveHistory.Count;
+                if (CompareMove(aMove, moveHistory[num - 4]) && CompareMove(aMove, moveHistory[num - 8]))
+                {
+                    if (CompareMove(moveHistory[num - 1], moveHistory[num - 5]) && CompareMove(moveHistory[num - 1], moveHistory[num - 9]))
+                    {
+                        isRepeat = true;
+                    }
+                }
             }
 
             return isRepeat;
@@ -383,7 +390,8 @@ namespace TaflWeb.Models
 
                     }
 
-                    sage.ProcessMovesLowerMem(moveList, currentTurnState);
+                    sage.ProcessMovesLowerMem(moveList, currentTurnState, moveHistory);
+                    
 
 
                 });
@@ -395,7 +403,10 @@ namespace TaflWeb.Models
 
             TimeSpan duration = (DateTime.Now - start);
             double runtime = duration.TotalSeconds;
-            Move bestMove = sage.PickBestLowerMem();
+
+            Func<Move, bool> repeatEvalFunc = new Func<Move, bool>((move) => CheckForRepeatMoves(move));
+
+            Move bestMove = sage.PickBestLowerMem(repeatEvalFunc);   //Pass the evaluation fucntion as a Func<> to the sage evaluation method.
             bestMove.runTime = runtime;
             return bestMove;
         }

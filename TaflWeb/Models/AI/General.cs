@@ -12,6 +12,8 @@ namespace TaflWeb.Model.AI
     /// <summary>
     /// Class look to weigh up piece advantages by likely hood of takes
     /// </summary>    
+    /// 
+
 
     public class General
     {
@@ -25,9 +27,15 @@ namespace TaflWeb.Model.AI
         public double desireToTakeWhenAttackerDepth2 = 10.0;
         public double desireToTakeWhenDefenderDepth2 = 1.0;
 
+        
+
+
+        private List<Move> moveHistory { get; set; }
+
         public List<TaflWeb.Model.Classes.Move> EvaluateLowMem(List<List<Move>> inputMoveList, TurnState currentTurnState)
         {
             List<Move> suggestedMoves = new List<Move>();
+
 
             //Get some scaling constants
 
@@ -61,7 +69,7 @@ namespace TaflWeb.Model.AI
             //Pick the best
             if (currentTurnState == TurnState.Defender)
             {
-                suggestedMoves.Add(inputMoveList[0].MaxObject((item) => (double)item.numberTakesDefenderAtDepth[0] * (desireToTakeWhenDefender / (maxDefenderTakeDepth0)) - (double)item.numberTakesAttackerAtDepth[1] * (desireToAvoidTakeDefender / maxAttackerTakeDepth1) + (double)item.numberTakesDefenderAtDepth[2] * (desireToTakeWhenDefenderDepth2 / maxDefenderTakeDepth2)));
+                suggestedMoves.Add(inputMoveList[0].MaxObject((item) =>  (double)item.numberTakesDefenderAtDepth[0] * (desireToTakeWhenDefender / (maxDefenderTakeDepth0)) - (double)item.numberTakesAttackerAtDepth[1] * (desireToAvoidTakeDefender / maxAttackerTakeDepth1) + (double)item.numberTakesDefenderAtDepth[2] * (desireToTakeWhenDefenderDepth2 / maxDefenderTakeDepth2)));
                 suggestedMoves.ForEach((item) =>
                 {
                     item.scoreGeneral = (double)item.numberTakesDefenderAtDepth[0] * (desireToTakeWhenDefender / maxDefenderTakeDepth0) - (double)item.numberTakesAttackerAtDepth[1] * (desireToAvoidTakeDefender / maxAttackerTakeDepth1) + (double)item.numberTakesDefenderAtDepth[2] * (desireToTakeWhenDefenderDepth2 / maxDefenderTakeDepth2);
@@ -81,9 +89,12 @@ namespace TaflWeb.Model.AI
                 });
             }
 
+
             return suggestedMoves;
 
         }
+
+      
 
         public List<Move> Evaluate(List<List<Move>> inputMoveList, TurnState currentTurnState)
         {

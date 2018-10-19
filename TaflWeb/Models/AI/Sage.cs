@@ -27,6 +27,8 @@ namespace TaflWeb.Model.AI
         public Move suggestedMove { get; set; } //Used for High mem calcs
         public Move longTermSuggestedMove { get; set; } // Used for lowMem version of calcs
 
+        public double desireNotToRepeatBoardPosition = 10000000000.0;
+
         public TurnState currentTurnState { get; set; } = TurnState.Attacker;
 
         private readonly Object locker = new Object();
@@ -44,7 +46,7 @@ namespace TaflWeb.Model.AI
         }
 
         
-        public void ProcessMovesLowerMem(List<List<Move>> input, TurnState turnState)
+        public void ProcessMovesLowerMem(List<List<Move>> input, TurnState turnState, List<Move> moveHistory)
         {
             try
             {
@@ -66,6 +68,8 @@ namespace TaflWeb.Model.AI
                     {
                         longTermBestList.AddRange(kingsCouncil.Evaluate(inputMoveList, turnState));
                     }
+
+                
                 }
             }
             catch(Exception ex)
@@ -75,12 +79,17 @@ namespace TaflWeb.Model.AI
 
         }
 
-        public Move PickBestLowerMem()
+        public Move PickBestLowerMem(Func<Move,bool> repeatEvalFunc)
         {
             longTermBestList.ForEach((item) =>
             {
 
                 item.scoreSage = item.scoreGeneral * weightGeneral + item.scoreKingsCouncil * weightKingsCouncil + item.scoreAssassin * weightAssassin;
+
+                if(repeatEvalFunc(item))
+                {
+                    item.scoreSage -= desireNotToRepeatBoardPosition;
+                }
 
             });
 
