@@ -53,3 +53,4 @@ C:\Github\TaflWeb\TaflWeb\obj\Debug\netcoreapp2.0\TaflWeb.dll
 C:\Github\TaflWeb\TaflWeb\obj\Debug\netcoreapp2.0\TaflWeb.pdb
 C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\background.jpg
 C:\Github\TaflWeb\TaflWeb\obj\Debug\netcoreapp2.0\TaflWeb.csprojAssemblyReference.cache
+C:\Github\TaflWeb\TaflWeb\bin\Debug\netcoreapp2.0\wwwroot\Images\celtic-border.png
