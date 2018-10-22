@@ -69,6 +69,8 @@ body {
   background-color: #fff;
   background-image: url("/Images/background.jpg");
   background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 [tabindex="-1"]:focus {
