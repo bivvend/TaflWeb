@@ -4884,8 +4884,8 @@ input[type="button"].btn-block {
   margin-bottom: 2rem;
   background-color: #e9ecef;
   border-radius: 0.3rem;
-  background-image: url("/Images/celtic-border.png");
-  background-size: contain;
+  background-image: url("/Images/knots.jpg");
+  background-size: 100% 100% ;
   background-repeat: no-repeat;
 }
 

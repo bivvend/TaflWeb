@@ -138,10 +138,12 @@
     }
 
     function updateMoveList() {
-        var listFound  = $("#moveList").empty();
+        var listFound = $("#moveList").empty();
+        var num = 1;
         if (boardData.moveHistory != undefined) {
-            boardData.moveHistory.forEach(function (move) {
-                listFound.append($("<li>").text("Move" + JSON.stringify(move.stringRespresentation)));
+            boardData.moveHistory.forEach(function (move) {                
+                listFound.append($("<li>").text("Move " + num + ": " + JSON.stringify(move.stringRespresentation)));
+                num++;
             });
         }
         else {
@@ -326,7 +328,7 @@
                 return new Promise((fulfill, reject) => {
                     let imageObj = new Image();
                     imageObj.src = url;
-                    imageObj.xValue = x; //Add extra properties to image object
+                    imageObj.xValue = x; //Add extra properties to image object 
                     imageObj.yValue = y;
                     imageObj.isPiece = isPiece;
                     imageObj.selected = squareSelected;

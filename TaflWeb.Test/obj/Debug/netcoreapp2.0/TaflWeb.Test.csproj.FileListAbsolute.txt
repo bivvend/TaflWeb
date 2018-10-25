@@ -64,3 +64,5 @@ C:\Github\TaflWeb\TaflWeb.Test\obj\Debug\netcoreapp2.0\TaflWeb.Test.csproj.CopyC
 C:\Github\TaflWeb\TaflWeb.Test\obj\Debug\netcoreapp2.0\TaflWeb.Test.dll
 C:\Github\TaflWeb\TaflWeb.Test\obj\Debug\netcoreapp2.0\TaflWeb.Test.pdb
 C:\Github\TaflWeb\TaflWeb.Test\bin\Debug\netcoreapp2.0\wwwroot\Images\background.jpg
+D:\Github\TaflWeb\TaflWeb.Test\bin\Debug\netcoreapp2.0\wwwroot\Images\background.jpg
+D:\Github\TaflWeb\TaflWeb.Test\bin\Debug\netcoreapp2.0\wwwroot\Images\celtic-border.png

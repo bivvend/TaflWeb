@@ -67,6 +67,10 @@ body {
   color: #212529;
   text-align: left;
   background-color: #fff;
+  background-image: url("/Images/background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 [tabindex="-1"]:focus {
@@ -88,8 +92,6 @@ p {
   margin-top: 0;
   margin-bottom: 1rem;
 }
-
-abbr[title],
 abbr[data-original-title] {
   text-decoration: underline;
   -webkit-text-decoration: underline dotted;
@@ -4882,6 +4884,9 @@ input[type="button"].btn-block {
   margin-bottom: 2rem;
   background-color: #e9ecef;
   border-radius: 0.3rem;
+  background-image: url("/Images/knots.jpg");
+  background-size: 100% 100% ;
+  background-repeat: no-repeat;
 }
 
 @media (min-width: 576px) {
