@@ -8,27 +8,39 @@
     <title>Board</title>
 </head>
 <body>
-    <h2>Game Board</h2>
-    <div>
-        <ul>
-            <li id="clickColumn">Column:</li>
-            <li id="clickRow">Row:</li>
-        </ul>
-    </div>
-    <div>
-        <ul>
-            <li id="turnStatus">Turn State:</li>
-            <li id="responseLabel">Response:</li>
-        </ul>
-        <input type="checkbox" id="checkBoxAttackerIsAI">Attacker Is AI?<br>
-        <input type="checkbox" id="checkBoxDefenderIsAI">Defender Is AI?<br>
-        <button class="button btn-sm btn-primary" id="resetButton">Reset</button>
-    </div>
-    <div>
-        <ul id="moveList"></ul>
-    </div>
-    <div>
-        <canvas id="boardImage" width="800" height="800"></canvas>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <h1>Game Board</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <canvas id="boardImage" width="600" height="600"></canvas>
+            </div>
+            <div class="col-sm">
+                <div>
+                    <ul>
+                        <li id="clickColumn">Column:</li>
+                        <li id="clickRow">Row:</li>
+                    </ul>
+                </div>
+                <div>
+                    <ul>
+                        <li id="turnStatus">Turn State:</li>
+                        <li id="responseLabel">Response:</li>
+                    </ul>
+                    <input type="checkbox" id="checkBoxAttackerIsAI">Attacker Is AI?<br>
+                    <input type="checkbox" id="checkBoxDefenderIsAI">Defender Is AI?<br>
+                    <button class="button btn-sm btn-primary" id="resetButton">Reset</button>
+                </div>
+                <div>
+                    <ul id="moveList"></ul>
+                </div>
+            </div>
+
+        </div>
     </div>
 
 </body>

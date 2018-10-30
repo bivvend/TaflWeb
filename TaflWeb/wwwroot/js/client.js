@@ -15,7 +15,9 @@
     });
 
     $("#resetButton").click(function (e) {
-        ajaxRequest.abort();
+        if (ajaxRequest != null) {
+            ajaxRequest.abort();
+        }        
         getBoardData();        
     });
 
@@ -132,7 +134,7 @@
             $("#checkBoxDefenderIsAI").prop('checked', true);
         }
         else {
-            $("#checkBoxAttackerIsAI").prop('checked', false);
+            $("#checkBoxDefenderIsAI").prop('checked', false);
         }
 
     }
