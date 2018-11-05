@@ -7,6 +7,9 @@
     var blockSizeY = null;
     var ajaxRequest = null;
 
+    var columnMappingArray = [ "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P" ];
+    var rowMappingArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" ];
+
     //Click needs to be registered to jQuery object not DOM object
     $("#boardImage").click(function (e) {
         mouseX = e.pageX - $("#boardImage").offset().left;
@@ -123,7 +126,20 @@
     }
 
     function showTurnState() {
-        $("#turnStatus").text("Turn State: " + boardData.currentTurnState);
+        var turnText = "Attacker's Turn"
+        if (boardData.currentTurnState == 0) {
+            turnText = "Attacker's Turn" 
+        }
+        else if (boardData.currentTurnState == 1) {
+            turnText = "Defender's Turn"
+        }
+        else if (boardData.currentTurnState == 3) {
+            turnText = "Defender Victory! - Press Reset to start again."
+        }
+        else if (boardData.currentTurnState == 4) {
+            turnText = "Attacker Victory! - Press Reset to start again."
+        }
+        $("#turnStatus").text("Turn State: " + turnText);
         if (boardData.attackerIsAI) {
             $("#checkBoxAttackerIsAI").prop('checked', true);
         }
@@ -159,8 +175,8 @@
 
             var columnToSend = Math.floor(x / blockSizeX);
             var rowToSend = Math.floor(y / blockSizeY);
-            $("#clickColumn").text("Column: " + columnToSend);
-            $("#clickRow").text("Row: " + rowToSend);
+            $("#clickColumn").text("Column: " + columnMappingArray[columnToSend]);
+            $("#clickRow").text("Row: " + rowMappingArray[rowToSend]);
 
             if ($("#checkBoxAttackerIsAI").is(':checked')) {
                 boardData.attackerIsAI = true;

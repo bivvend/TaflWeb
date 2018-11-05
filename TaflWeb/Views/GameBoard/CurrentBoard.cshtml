@@ -20,6 +20,8 @@
                 <canvas id="boardImage" width="600" height="600"></canvas>
             </div>
             <div class="col-sm">
+                <h3>Current State</h3>
+                <br />
                 <div>
                     <ul>
                         <li id="clickColumn">Column:</li>
@@ -31,12 +33,24 @@
                         <li id="turnStatus">Turn State:</li>
                         <li id="responseLabel">Response:</li>
                     </ul>
+                    <br />
+                    <h3>AI Control</h3>
+                    <br />
                     <input type="checkbox" id="checkBoxAttackerIsAI">Attacker Is AI?<br>
                     <input type="checkbox" id="checkBoxDefenderIsAI">Defender Is AI?<br>
-                    <button class="button btn-sm btn-primary" id="resetButton">Reset</button>
+                    <br />
+                    <h3>Controls</h3>
+                    <br />
+                    <button class="button btn-sm btn-secondary" id="resetButton">Reset</button>
                 </div>
-                <div>
-                    <ul id="moveList"></ul>
+                <br />
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+                        Previous Moves
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" id="moveList">
+                    </ul>
                 </div>
             </div>
 
