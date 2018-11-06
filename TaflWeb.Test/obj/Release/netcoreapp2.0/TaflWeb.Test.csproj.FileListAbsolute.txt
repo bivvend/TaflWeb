@@ -5,6 +5,7 @@ C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\attackti
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\background.jpg
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\blueopal.bmp
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\blueopal.jpg
+C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\bottomborder.bmp
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\celtic-border.png
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\deftile1.bmp
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\deftile2.bmp
@@ -12,11 +13,14 @@ C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\deftile3
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\deftile4.bmp
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\fireopal.jpg
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\knots.jpg
+C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\leftborder.bmp
+C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\rightborder.bmp
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\throne.bmp
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\tile1.bmp
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\tile2.bmp
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\tile3.bmp
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\tile4.bmp
+C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\topborder.bmp
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\xunit.runner.visualstudio.dotnetcore.testadapter.dll
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\xunit.runner.reporters.netcoreapp10.dll
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\xunit.runner.utility.netcoreapp10.dll

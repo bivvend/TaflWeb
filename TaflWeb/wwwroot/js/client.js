@@ -254,17 +254,20 @@
             var selected = false;
             var highlighted = false;
             var square;
-            var borderSource = '../Images/knots.jpg';
+            var borderSourceTop = '../Images/topborder.bmp';
+            var borderSourceBottom = '../Images/bottomborder.bmp';
+            var borderSourceLeft = '../Images/leftborder.bmp';
+            var borderSourceRight = '../Images/rightborder.bmp';
 
             //Define borders
             //Top
-            borderDrawArray.push([0, 0, NUMBER_OF_COLUMNS + 2, 1, borderSource]);
+            borderDrawArray.push([0, 0, NUMBER_OF_COLUMNS + 2, 1, borderSourceTop]);
             //Bottom
-            borderDrawArray.push([0, NUMBER_OF_ROWS + 1, NUMBER_OF_COLUMNS + 2, NUMBER_OF_ROWS + 2, borderSource]);
+            borderDrawArray.push([0, NUMBER_OF_ROWS + 1, NUMBER_OF_COLUMNS + 2, NUMBER_OF_ROWS + 2, borderSourceBottom]);
             //Left
-            borderDrawArray.push([0, 1, 1, NUMBER_OF_ROWS + 1, borderSource]);
+            borderDrawArray.push([0, 1, 1, NUMBER_OF_ROWS + 1, borderSourceLeft]);
             //Right
-            borderDrawArray.push([NUMBER_OF_COLUMNS + 1, 0, NUMBER_OF_COLUMNS + 2, NUMBER_OF_ROWS + 1, borderSource]);
+            borderDrawArray.push([NUMBER_OF_COLUMNS + 1, 1, NUMBER_OF_COLUMNS + 2, NUMBER_OF_ROWS + 1, borderSourceRight]);
 
                         
             for (let i = 0; i < NUMBER_OF_COLUMNS; i++){   //Use let to define local variables.
