@@ -6,10 +6,12 @@
     var blockSizeX = null;
     var blockSizeY = null;
     var ajaxRequest = null;
+    var thinking = false;
+    var angle = 0;
 
-
+    
     var columnMappingArray = [ "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P" ];
-    var rowMappingArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" ];
+    var rowMappingArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"];
 
     //Click needs to be registered to jQuery object not DOM object
     $("#boardImage").click(function (e) {
@@ -52,6 +54,7 @@
     });
 
     function runAI() {
+        thinking = true;
         var objectToSend = JSON.stringify(boardData);
         ajaxRequest = $.ajax({
             type: "POST",
@@ -94,11 +97,15 @@
             },
             failure: function (response) {
                 console.log(response.responseText);
+                thinking = false;
             },
             error: function (response) {
                 console.log(response.responseText);
+                thinking = false;
             }
+            
         });
+        thinking = false;
     }
 
     function getBoardData() {
@@ -463,6 +470,23 @@
         }
         else {
             alert("Canvas not supported!");
+        }
+    }
+
+    ////start a timer to rotate thinking image if AI is running
+    setInterval(rotateImage, 100);
+
+    function rotateImage(){
+        if (thinking) {
+            $("#thinkingImage").rotate(angle);
+            angle += 1;
+            if (angle > 360) {
+                angle = 0;
+            }
+
+        }
+        else {
+            angle = 0;
         }
     }
      

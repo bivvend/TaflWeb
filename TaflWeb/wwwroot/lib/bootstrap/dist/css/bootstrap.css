@@ -625,8 +625,15 @@ pre code {
   padding-top: 15px;
   border-radius: 25px;
   border: 2px solid #000000;
-  margin: 5px;
+  margin: 5px; 
 }
+
+.centerImage {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 
 .col {
   -ms-flex-preferred-size: 0;
