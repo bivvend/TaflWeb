@@ -15,6 +15,7 @@ C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\fireopal
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\knots.jpg
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\leftborder.bmp
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\rightborder.bmp
+C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\shield.jpg
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\throne.bmp
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\tile1.bmp
 C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\tile2.bmp
@@ -38,4 +39,3 @@ C:\Github\TaflWeb\TaflWeb.Test\obj\Release\netcoreapp2.0\TaflWeb.Test.AssemblyIn
 C:\Github\TaflWeb\TaflWeb.Test\obj\Release\netcoreapp2.0\TaflWeb.Test.csproj.CopyComplete
 C:\Github\TaflWeb\TaflWeb.Test\obj\Release\netcoreapp2.0\TaflWeb.Test.dll
 C:\Github\TaflWeb\TaflWeb.Test\obj\Release\netcoreapp2.0\TaflWeb.Test.pdb
-C:\Github\TaflWeb\TaflWeb.Test\bin\Release\netcoreapp2.0\wwwroot\Images\shield.jpg

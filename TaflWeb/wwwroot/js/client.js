@@ -21,7 +21,7 @@
     });
 
     $("#resetButton").click(function (e) {
-        if (ajaxRequest != null) {
+        if (ajaxRequest !== null) {
             ajaxRequest.abort();
         }        
         getBoardData();        
@@ -35,7 +35,7 @@
             boardData.attackerIsAI = false;
         }
 
-        if (boardData.currentTurnState == 0 && boardData.attackerIsAI) {
+        if (boardData.currentTurnState === 0 && boardData.attackerIsAI) {
             runAI();
         }
     });
@@ -48,7 +48,7 @@
         else {
             boardData.defenderIsAI = false;
         }
-        if (boardData.currentTurnState == 1 && boardData.defenderIsAI) {
+        if (boardData.currentTurnState === 1 && boardData.defenderIsAI) {
             runAI();
         }
     });
@@ -87,10 +87,10 @@
                         boardData.defenderIsAI = false;
                     }
                 }
-                if (boardData.currentTurnState == 0 && boardData.attackerIsAI) {
+                if (boardData.currentTurnState === 0 && boardData.attackerIsAI) {
                     runAI();
                 }
-                if (boardData.currentTurnState == 1 && boardData.defenderIsAI) {
+                if (boardData.currentTurnState === 1 && boardData.defenderIsAI) {
                     runAI();
                 }
                 
@@ -134,18 +134,18 @@
     }
 
     function showTurnState() {
-        var turnText = "Attacker's Turn"
-        if (boardData.currentTurnState == 0) {
-            turnText = "Attacker's Turn" 
+        var turnText = "Attacker's Turn";
+        if (boardData.currentTurnState === 0) {
+            turnText = "Attacker's Turn"; 
         }
-        else if (boardData.currentTurnState == 1) {
-            turnText = "Defender's Turn"
+        else if (boardData.currentTurnState === 1) {
+            turnText = "Defender's Turn";
         }
-        else if (boardData.currentTurnState == 3) {
-            turnText = "Defender Victory! - Press Reset to start again."
+        else if (boardData.currentTurnState === 3) {
+            turnText = "Defender Victory! - Press Reset to start again.";
         }
-        else if (boardData.currentTurnState == 4) {
-            turnText = "Attacker Victory! - Press Reset to start again."
+        else if (boardData.currentTurnState === 4) {
+            turnText = "Attacker Victory! - Press Reset to start again.";
         }
         $("#turnStatus").text("Turn State: " + turnText);
         if (boardData.attackerIsAI) {
@@ -166,7 +166,7 @@
     function updateMoveList() {
         var listFound = $("#moveList").empty();
         var num = 1;
-        if (boardData.moveHistory != undefined) {
+        if (boardData.moveHistory !== undefined) {
             boardData.moveHistory.forEach(function (move) {                
                 listFound.append($("<li>").text("Move " + num + ": " + JSON.stringify(move.stringRespresentation)));
                 num++;
@@ -179,7 +179,7 @@
 
     function boardClick(x, y) {
         var i = 0;
-        if (blockSizeX != undefined && blockSizeY != undefined && blockSizeX > 0 && blockSizeY > 0) {
+        if (blockSizeX !== undefined && blockSizeY !== undefined && blockSizeX > 0 && blockSizeY > 0) {
 
             var columnToSend = Math.floor(x / blockSizeX);
             var rowToSend = Math.floor(y / blockSizeY);
@@ -215,10 +215,10 @@
                     $("#responseLabel").text("Response:" + boardData.responseText);
                     showTurnState();
 
-                    if (boardData.currentTurnState == 0 && boardData.attackerIsAI) {
+                    if (boardData.currentTurnState === 0 && boardData.attackerIsAI) {
                         runAI();
                     }
-                    if (boardData.currentTurnState == 1 && boardData.defenderIsAI) {
+                    if (boardData.currentTurnState === 1 && boardData.defenderIsAI) {
                         runAI();
                     }
                 },
@@ -241,7 +241,7 @@
         if (canvas.getContext) {
             var ctx = canvas.getContext('2d');
 
-            if (NUMBER_OF_COLUMNS != 0 && NUMBER_OF_ROWS != 0) {
+            if (NUMBER_OF_COLUMNS !== 0 && NUMBER_OF_ROWS !== 0) {
                 blockSizeX = Math.round(canvas.width / (NUMBER_OF_COLUMNS + 2)) - 1; //+ 2 for border
                 blockSizeY = Math.round(canvas.height / (NUMBER_OF_ROWS + 2)) - 1;
             }
@@ -289,16 +289,16 @@
                     highlighted = square.Highlighted;
                       
                     var stringType = "1";  //Better to be explicit here 
-                    if (type == 0) {
+                    if (type === 0) {
                         stringType = "1";
                     }
-                    if (type == 1) {
+                    if (type === 1) {
                         stringType = "2";
                     }
-                    if (type == 2) {
+                    if (type === 2) {
                         stringType = "3";
                     }
-                    if (type == 3) {
+                    if (type === 3) {
                         stringType = "4";
                     }
                     var src;
@@ -343,7 +343,7 @@
                             break
                     } 
 
-                    if (pieceValue != 3) {
+                    if (pieceValue !== 3) {
                         pieceDrawArray.push([srcPiece, i, j]);
                     }
 
@@ -370,29 +370,7 @@
                 promiseArray.push(loadImage(true, item[4], item[0], item[1], false, false, false, item[2], item[3]));
             });
 
-            function loadImage(isBorder, url, x, y, isPiece, squareHighlighted, squareSelected, x2, y2) { //x2 y2 for borders
-                return new Promise((fulfill, reject) => {
-                    let imageObj = new Image();
-                    imageObj.src = url;
-                    if (isBorder) {
-                        imageObj.xValue = x; 
-                        imageObj.yValue = y;
-                        imageObj.x2Value = x2;
-                        imageObj.y2Value = y2;
-                    }
-                    else{
-                        imageObj.xValue = x + 1; //Add extra properties to image object 
-                        imageObj.yValue = y + 1; //Add 1 to make room for border
-                        imageObj.x2Value = 0;
-                        imageObj.y2Value = 0;
-                    }
-                    imageObj.isPiece = isPiece;
-                    imageObj.isBorder = isBorder;
-                    imageObj.selected = squareSelected;
-                    imageObj.highlighted = squareHighlighted;
-                    imageObj.onload = () => fulfill(imageObj);
-                });
-            }
+            
 
             // get images in promise array
             Promise.all(promiseArray)
@@ -473,8 +451,31 @@
         }
     }
 
-    ////start a timer to rotate thinking image if AI is running
-    setInterval(rotateImage, 100);
+    
+
+    function loadImage(isBorder, url, x, y, isPiece, squareHighlighted, squareSelected, x2, y2) { //x2 y2 for borders
+        return new Promise((fulfill, reject) => {
+            let imageObj = new Image();
+            imageObj.src = url;
+            if (isBorder) {
+                imageObj.xValue = x;
+                imageObj.yValue = y;
+                imageObj.x2Value = x2;
+                imageObj.y2Value = y2;
+            }
+            else {
+                imageObj.xValue = x + 1; //Add extra properties to image object 
+                imageObj.yValue = y + 1; //Add 1 to make room for border
+                imageObj.x2Value = 0;
+                imageObj.y2Value = 0;
+            }
+            imageObj.isPiece = isPiece;
+            imageObj.isBorder = isBorder;
+            imageObj.selected = squareSelected;
+            imageObj.highlighted = squareHighlighted;
+            imageObj.onload = () => fulfill(imageObj);
+        });
+    }
 
     function rotateImage(){
         if (thinking) {
@@ -489,6 +490,8 @@
             angle = 0;
         }
     }
-     
+
+    ////start a timer to rotate thinking image if AI is running
+    setInterval(rotateImage, 100);     
     getBoardData();
 });
