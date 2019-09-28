@@ -6,16 +6,24 @@
     var blockSizeX = null;
     var blockSizeY = null;
     var ajaxRequest = null;
+    var thinking = false;
+    var angle = 0;
+
+    
+    var columnMappingArray = [ "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P" ];
+    var rowMappingArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"];
 
     //Click needs to be registered to jQuery object not DOM object
     $("#boardImage").click(function (e) {
         mouseX = e.pageX - $("#boardImage").offset().left;
         mouseY = e.pageY - $("#boardImage").offset().top;
-        boardClick(mouseX, mouseY);
+        boardClick(mouseX - blockSizeX, mouseY - blockSizeY);
     });
 
     $("#resetButton").click(function (e) {
-        ajaxRequest.abort();
+        if (ajaxRequest !== null) {
+            ajaxRequest.abort();
+        }        
         getBoardData();        
     });
 
@@ -27,7 +35,7 @@
             boardData.attackerIsAI = false;
         }
 
-        if (boardData.currentTurnState == 0 && boardData.attackerIsAI) {
+        if (boardData.currentTurnState === 0 && boardData.attackerIsAI) {
             runAI();
         }
     });
@@ -40,12 +48,13 @@
         else {
             boardData.defenderIsAI = false;
         }
-        if (boardData.currentTurnState == 1 && boardData.defenderIsAI) {
+        if (boardData.currentTurnState === 1 && boardData.defenderIsAI) {
             runAI();
         }
     });
 
     function runAI() {
+        thinking = true;
         var objectToSend = JSON.stringify(boardData);
         ajaxRequest = $.ajax({
             type: "POST",
@@ -78,21 +87,25 @@
                         boardData.defenderIsAI = false;
                     }
                 }
-                if (boardData.currentTurnState == 0 && boardData.attackerIsAI) {
+                if (boardData.currentTurnState === 0 && boardData.attackerIsAI) {
                     runAI();
                 }
-                if (boardData.currentTurnState == 1 && boardData.defenderIsAI) {
+                if (boardData.currentTurnState === 1 && boardData.defenderIsAI) {
                     runAI();
                 }
                 
             },
             failure: function (response) {
                 console.log(response.responseText);
+                thinking = false;
             },
             error: function (response) {
                 console.log(response.responseText);
+                thinking = false;
             }
+            
         });
+        thinking = false;
     }
 
     function getBoardData() {
@@ -121,7 +134,20 @@
     }
 
     function showTurnState() {
-        $("#turnStatus").text("Turn State: " + boardData.currentTurnState);
+        var turnText = "Attacker's Turn";
+        if (boardData.currentTurnState === 0) {
+            turnText = "Attacker's Turn"; 
+        }
+        else if (boardData.currentTurnState === 1) {
+            turnText = "Defender's Turn";
+        }
+        else if (boardData.currentTurnState === 3) {
+            turnText = "Defender Victory! - Press Reset to start again.";
+        }
+        else if (boardData.currentTurnState === 4) {
+            turnText = "Attacker Victory! - Press Reset to start again.";
+        }
+        $("#turnStatus").text("Turn State: " + turnText);
         if (boardData.attackerIsAI) {
             $("#checkBoxAttackerIsAI").prop('checked', true);
         }
@@ -132,7 +158,7 @@
             $("#checkBoxDefenderIsAI").prop('checked', true);
         }
         else {
-            $("#checkBoxAttackerIsAI").prop('checked', false);
+            $("#checkBoxDefenderIsAI").prop('checked', false);
         }
 
     }
@@ -140,7 +166,7 @@
     function updateMoveList() {
         var listFound = $("#moveList").empty();
         var num = 1;
-        if (boardData.moveHistory != undefined) {
+        if (boardData.moveHistory !== undefined) {
             boardData.moveHistory.forEach(function (move) {                
                 listFound.append($("<li>").text("Move " + num + ": " + JSON.stringify(move.stringRespresentation)));
                 num++;
@@ -153,12 +179,12 @@
 
     function boardClick(x, y) {
         var i = 0;
-        if (blockSizeX != undefined && blockSizeY != undefined && blockSizeX > 0 && blockSizeY > 0) {
+        if (blockSizeX !== undefined && blockSizeY !== undefined && blockSizeX > 0 && blockSizeY > 0) {
 
             var columnToSend = Math.floor(x / blockSizeX);
             var rowToSend = Math.floor(y / blockSizeY);
-            $("#clickColumn").text("Column: " + columnToSend);
-            $("#clickRow").text("Row: " + rowToSend);
+            $("#clickColumn").text("Column: " + columnMappingArray[columnToSend]);
+            $("#clickRow").text("Row: " + rowMappingArray[rowToSend]);
 
             if ($("#checkBoxAttackerIsAI").is(':checked')) {
                 boardData.attackerIsAI = true;
@@ -189,10 +215,10 @@
                     $("#responseLabel").text("Response:" + boardData.responseText);
                     showTurnState();
 
-                    if (boardData.currentTurnState == 0 && boardData.attackerIsAI) {
+                    if (boardData.currentTurnState === 0 && boardData.attackerIsAI) {
                         runAI();
                     }
-                    if (boardData.currentTurnState == 1 && boardData.defenderIsAI) {
+                    if (boardData.currentTurnState === 1 && boardData.defenderIsAI) {
                         runAI();
                     }
                 },
@@ -215,9 +241,9 @@
         if (canvas.getContext) {
             var ctx = canvas.getContext('2d');
 
-            if (NUMBER_OF_COLUMNS != 0 && NUMBER_OF_ROWS != 0) {
-                blockSizeX = Math.round(canvas.width / NUMBER_OF_COLUMNS) - 1;
-                blockSizeY = Math.round(canvas.height / NUMBER_OF_ROWS) - 1;
+            if (NUMBER_OF_COLUMNS !== 0 && NUMBER_OF_ROWS !== 0) {
+                blockSizeX = Math.round(canvas.width / (NUMBER_OF_COLUMNS + 2)) - 1; //+ 2 for border
+                blockSizeY = Math.round(canvas.height / (NUMBER_OF_ROWS + 2)) - 1;
             }
             else {
                 blockSizeX = 80;
@@ -227,6 +253,7 @@
             var numberOfElements = NUMBER_OF_COLUMNS * NUMBER_OF_ROWS;
             var tileDrawArray = [];
             var pieceDrawArray = [];
+            var borderDrawArray = [];
 
             var value = 0;
             var pieceValue = 0;
@@ -234,6 +261,21 @@
             var selected = false;
             var highlighted = false;
             var square;
+            var borderSourceTop = '../Images/topborder.bmp';
+            var borderSourceBottom = '../Images/bottomborder.bmp';
+            var borderSourceLeft = '../Images/leftborder.bmp';
+            var borderSourceRight = '../Images/rightborder.bmp';
+
+            //Define borders
+            //Top
+            borderDrawArray.push([0, 0, NUMBER_OF_COLUMNS + 2, 1, borderSourceTop]);
+            //Bottom
+            borderDrawArray.push([0, NUMBER_OF_ROWS + 1, NUMBER_OF_COLUMNS + 2, NUMBER_OF_ROWS + 2, borderSourceBottom]);
+            //Left
+            borderDrawArray.push([0, 1, 1, NUMBER_OF_ROWS + 1, borderSourceLeft]);
+            //Right
+            borderDrawArray.push([NUMBER_OF_COLUMNS + 1, 1, NUMBER_OF_COLUMNS + 2, NUMBER_OF_ROWS + 1, borderSourceRight]);
+
                         
             for (let i = 0; i < NUMBER_OF_COLUMNS; i++){   //Use let to define local variables.
                 for (let j = 0; j < NUMBER_OF_ROWS; j++){
@@ -247,16 +289,16 @@
                     highlighted = square.Highlighted;
                       
                     var stringType = "1";  //Better to be explicit here 
-                    if (type == 0) {
+                    if (type === 0) {
                         stringType = "1";
                     }
-                    if (type == 1) {
+                    if (type === 1) {
                         stringType = "2";
                     }
-                    if (type == 2) {
+                    if (type === 2) {
                         stringType = "3";
                     }
-                    if (type == 3) {
+                    if (type === 3) {
                         stringType = "4";
                     }
                     var src;
@@ -301,7 +343,7 @@
                             break
                     } 
 
-                    if (pieceValue != 3) {
+                    if (pieceValue !== 3) {
                         pieceDrawArray.push([srcPiece, i, j]);
                     }
 
@@ -317,25 +359,18 @@
             var promiseArray = [];
 
             tileDrawArray.forEach(function (item) {
-                promiseArray.push(loadImage(item[0], item[1], item[2], false, item[3], item[4]));
+                promiseArray.push(loadImage(false, item[0], item[1], item[2], false, item[3], item[4], 0, 0));
             });
 
             pieceDrawArray.forEach(function (item) {
-                promiseArray.push(loadImage(item[0], item[1], item[2], true, false, false));
+                promiseArray.push(loadImage(false, item[0], item[1], item[2], true, false, false, 0, 0));
             });
 
-            function loadImage(url, x, y, isPiece, squareHighlighted, squareSelected) {
-                return new Promise((fulfill, reject) => {
-                    let imageObj = new Image();
-                    imageObj.src = url;
-                    imageObj.xValue = x; //Add extra properties to image object 
-                    imageObj.yValue = y;
-                    imageObj.isPiece = isPiece;
-                    imageObj.selected = squareSelected;
-                    imageObj.highlighted = squareHighlighted;
-                    imageObj.onload = () => fulfill(imageObj);
-                });
-            }
+            borderDrawArray.forEach(function (item) {
+                promiseArray.push(loadImage(true, item[4], item[0], item[1], false, false, false, item[2], item[3]));
+            });
+
+            
 
             // get images in promise array
             Promise.all(promiseArray)
@@ -349,24 +384,31 @@
                         ctx.shadowOffsetY = 0;
                         ctx.lineWidth = 1;
                         var angle = Math.random() * 2 * Math.PI;
-                        if (!img.isPiece) {                            
-                            ctx.drawImage(img, img.xValue * blockSizeX, img.yValue * blockSizeY, blockSizeX, blockSizeY);
+                        if (!img.isPiece) {
+                            if (img.isBorder) {
+                                var imWidth = blockSizeX * (img.x2Value - img.xValue);
+                                var imHeight = blockSizeY * (img.y2Value - img.yValue);
 
-                            if (img.highlighted || img.selected) {
-                                //Draw a selection rectangle
-                                ctx.beginPath();
-                                ctx.strokeStyle = 'yellow';
-                                ctx.shadowColor = 'yellow';
-                                ctx.lineWidth = 5;
-                                ctx.shadowBlur = 20;
-                                ctx.shadowOffsetX = 0;
-                                ctx.shadowOffsetY = 0;
-                                ctx.rect(img.xValue * blockSizeX + 3, img.yValue * blockSizeY + 3, blockSizeX - 6, blockSizeY - 6);
-                                ctx.closePath();
-                                ctx.stroke();
+                                ctx.drawImage(img, img.xValue * blockSizeX, img.yValue * blockSizeY, imWidth, imHeight);
+                            }
+                            else {
+                                ctx.drawImage(img, img.xValue * blockSizeX, img.yValue * blockSizeY, blockSizeX, blockSizeY);
+                                if (img.highlighted || img.selected) {
+                                    //Draw a selection rectangle
+                                    ctx.beginPath();
+                                    ctx.strokeStyle = 'yellow';
+                                    ctx.shadowColor = 'yellow';
+                                    ctx.lineWidth = 5;
+                                    ctx.shadowBlur = 20;
+                                    ctx.shadowOffsetX = 0;
+                                    ctx.shadowOffsetY = 0;
+                                    ctx.rect(img.xValue * blockSizeX + 3, img.yValue * blockSizeY + 3, blockSizeX - 6, blockSizeY - 6);
+                                    ctx.closePath();
+                                    ctx.stroke();
+                                }
                             }
                         }
-                        else {     
+                        else{     
                             //Draw outline with shadow
                             ctx.beginPath();
                             ctx.arc(img.xValue * blockSizeX + blockSizeX / 2, img.yValue * blockSizeY + blockSizeY / 2, 0.8 * (blockSizeX / 2), 0, 2 * Math.PI);
@@ -397,14 +439,8 @@
                             ctx.arc(img.xValue * blockSizeX + blockSizeX / 3, img.yValue * blockSizeY + blockSizeY / 3, 0.1 * (blockSizeX / 2), 0, 2 * Math.PI);
                             ctx.closePath();
                             ctx.fill();
-                            ctx.globalAlpha = 1.0;
-                           
-
-
+                            ctx.globalAlpha = 1.0;  
                         }
-
-                        
-
                     });
                 })
                 .catch((e) => alert(e));
@@ -414,6 +450,48 @@
             alert("Canvas not supported!");
         }
     }
-     
+
+    
+
+    function loadImage(isBorder, url, x, y, isPiece, squareHighlighted, squareSelected, x2, y2) { //x2 y2 for borders
+        return new Promise((fulfill, reject) => {
+            let imageObj = new Image();
+            imageObj.src = url;
+            if (isBorder) {
+                imageObj.xValue = x;
+                imageObj.yValue = y;
+                imageObj.x2Value = x2;
+                imageObj.y2Value = y2;
+            }
+            else {
+                imageObj.xValue = x + 1; //Add extra properties to image object 
+                imageObj.yValue = y + 1; //Add 1 to make room for border
+                imageObj.x2Value = 0;
+                imageObj.y2Value = 0;
+            }
+            imageObj.isPiece = isPiece;
+            imageObj.isBorder = isBorder;
+            imageObj.selected = squareSelected;
+            imageObj.highlighted = squareHighlighted;
+            imageObj.onload = () => fulfill(imageObj);
+        });
+    }
+
+    function rotateImage(){
+        if (thinking) {
+            $("#thinkingImage").rotate(angle);
+            angle += 1;
+            if (angle > 360) {
+                angle = 0;
+            }
+
+        }
+        else {
+            angle = 0;
+        }
+    }
+
+    ////start a timer to rotate thinking image if AI is running
+    setInterval(rotateImage, 100);     
     getBoardData();
 });
